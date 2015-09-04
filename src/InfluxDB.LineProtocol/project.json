@@ -1,12 +1,20 @@
 ﻿{
   "version": "1.0.0-*",
-  "description": "InfluxDB.LineProtocol Class Library",
+  "description": "A .NET library for efficiently sending time series to InfluxDB",
   "authors": [ "nblumhardt" ],
-  "tags": [ "" ],
-  "projectUrl": "",
-  "licenseUrl": "",
+  "tags": [ "influxdb" ],
+  "projectUrl": "https://github.com/nblumhardt/influxdb-lineprotocol",
+  "licenseUrl": "http://www.apache.org/licenses/LICENSE-2.0",
 
   "frameworks": {
+    "net45": {
+      "frameworkAssemblies": {
+        "System.Runtime": "4.0.0.0",
+        "System.IO": "4.0.0.0",
+        "System.Collections": "4.0.0.0",
+        "System.Net.Http": "4.0.0.0"
+      }
+    },
     "dnx451": {
       "frameworkAssemblies": {
         "System.Runtime": "4.0.10.0",

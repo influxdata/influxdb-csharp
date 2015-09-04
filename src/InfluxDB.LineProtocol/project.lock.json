@@ -2,6 +2,7 @@
   "locked": false,
   "version": 1,
   "targets": {
+    ".NETFramework,Version=v4.5": {},
     "DNX,Version=v4.5.1": {},
     ".NETPlatform,Version=v5.0": {
       "Microsoft.CSharp/4.0.0-beta-23019": {
@@ -739,6 +740,12 @@
   },
   "projectFileDependencyGroups": {
     "": [],
+    ".NETFramework,Version=v4.5": [
+      "fx/System.Runtime >= 4.0.0.0",
+      "fx/System.IO >= 4.0.0.0",
+      "fx/System.Collections >= 4.0.0.0",
+      "fx/System.Net.Http >= 4.0.0.0"
+    ],
     "DNX,Version=v4.5.1": [
       "fx/System.Runtime >= 4.0.10.0",
       "fx/System.IO >= 4.0.0.0",
