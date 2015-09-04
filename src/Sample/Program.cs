@@ -1,7 +1,9 @@
-﻿using InfluxDB.LineProtocol.Payload;
+﻿using InfluxDB.LineProtocol.Client;
+using InfluxDB.LineProtocol.Payload;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Sample
@@ -10,25 +12,53 @@ namespace Sample
     {
         public void Main(string[] args)
         {
-            var payload = new LineProtocolPayload();
+            Collect().Wait();
+        }
 
-            var measurement = new LineProtocolPoint(
-                "cpu",
-                new Dictionary<string, object>
+        async Task Collect()
+        {
+            var client = new LineProtocolClient(new Uri("http://192.168.99.100:8086"), "data");
+
+            var process = Process.GetCurrentProcess();
+
+            var tags = new Dictionary<string, string>
                 {
-                    {"value", 123}
-                },
-                new Dictionary<string, string>
-                {
-                    {"host", "nblumhardt-rmbp" }
-                },
-                DateTime.UtcNow);
+                    { "host", Environment.GetEnvironmentVariable("COMPUTERNAME") },
+                    { "os", Environment.GetEnvironmentVariable("OS") },
+                    { "process", Path.GetFileName(process.MainModule.FileName) }
+                };
 
-            payload.Add(measurement);
+            while (true)
+            {
+                var now = DateTime.UtcNow;
 
-            payload.Format(Console.Out);
+                var payload = new LineProtocolPayload();
 
-            Console.Read();
+                payload.Add(new LineProtocolPoint(
+                    "cpu_time",
+                    new Dictionary<string, object>
+                    {
+                        { "value", process.TotalProcessorTime.TotalMilliseconds },
+                        { "user", process.UserProcessorTime.TotalMilliseconds }
+                    },
+                    tags,
+                    now));
+
+                payload.Add(new LineProtocolPoint(
+                    "working_set",
+                    new Dictionary<string, object>
+                    {
+                        { "value", process.WorkingSet64 },
+                    },
+                    tags,
+                    now));
+
+                var influxResult = await client.WriteAsync(payload);
+                if (!influxResult.Success)
+                    Console.Error.WriteLine(influxResult.ErrorMessage);
+
+                await Task.Delay(1000);
+            }
         }
     }
 }

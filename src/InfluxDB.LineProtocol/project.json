@@ -11,7 +11,8 @@
       "frameworkAssemblies": {
         "System.Runtime": "4.0.10.0",
         "System.IO": "4.0.0.0",
-        "System.Collections": "4.0.0.0"
+        "System.Collections": "4.0.0.0",
+        "System.Net.Http": "4.0.0.0"
       }
     },
     "dotnet": {
@@ -20,7 +21,8 @@
         "System.Linq": "4.0.0-beta-23019",
         "System.Threading": "4.0.10-beta-23019",
         "System.Runtime": "4.0.10-beta-23019",
-        "Microsoft.CSharp": "4.0.0-beta-23019"
+        "Microsoft.CSharp": "4.0.0-beta-23019",
+        "System.Net.Http": "4.0.0-beta-23109"
       }
     }
   }
