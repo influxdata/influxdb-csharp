@@ -88,4 +88,5 @@ Roadmap for anyone keen to help out:
  - [ ] Split the metrics collection facilities out into a separate package that uses the base Line Protocol package
  - [ ] Smarter batching
  - [ ] Better `Metrics.Close()`/`MetricsCollector.Dispose()`
+ - [ ] Generally give some attention to performance
 
