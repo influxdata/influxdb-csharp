@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace InfluxDB.LineProtocol.Payload
 {
@@ -20,7 +21,8 @@ namespace InfluxDB.LineProtocol.Payload
             { typeof(float), FormatFloat },
             { typeof(double), FormatFloat },
             { typeof(decimal), FormatFloat },
-            { typeof(bool), FormatBoolean }
+            { typeof(bool), FormatBoolean },
+            { typeof(TimeSpan), FormatTimespan }
         };
 
         public static string EscapeName(string nameOrKey)
@@ -43,12 +45,17 @@ namespace InfluxDB.LineProtocol.Payload
 
         static string FormatInteger(object i)
         {
-            return i.ToString() + "i";
+            return ((IFormattable)i).ToString(null, CultureInfo.InvariantCulture) + "i";
         }
 
         static string FormatFloat(object f)
         {
-            return f.ToString();
+            return ((IFormattable)f).ToString(null, CultureInfo.InvariantCulture);
+        }
+
+        static string FormatTimespan(object ts)
+        {
+            return ((TimeSpan)ts).TotalMilliseconds.ToString(CultureInfo.InvariantCulture);
         }
 
         static string FormatBoolean(object b)
@@ -64,7 +71,7 @@ namespace InfluxDB.LineProtocol.Payload
         public static string FormatTimestamp(DateTime utcTimestamp)
         {
             var t = utcTimestamp - Origin;
-            return ((long)(t.TotalMilliseconds * 1000000L)).ToString();
+            return ((long)(t.TotalMilliseconds * 1000000L)).ToString(CultureInfo.InvariantCulture);
         }
     }
 }

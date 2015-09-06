@@ -33,6 +33,7 @@ Global
 		{DC6028D6-ED1D-4857-B5EB-28BA05E3F531}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DC6028D6-ED1D-4857-B5EB-28BA05E3F531}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC6028D6-ED1D-4857-B5EB-28BA05E3F531}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC6028D6-ED1D-4857-B5EB-28BA05E3F531}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
