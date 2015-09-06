@@ -86,4 +86,6 @@ Roadmap for anyone keen to help out:
  - [ ] Complete support for the parameters accepted to Influx's `/write` endpoint
  - [ ] Sampling support for counter metrics (i.e. aggregate values within a sampling interval)
  - [ ] Split the metrics collection facilities out into a separate package that uses the base Line Protocol package
+ - [ ] Smarter batching
+ - [ ] Better `Metrics.Close()`/`MetricsCollector.Dispose()`
 
