@@ -82,6 +82,7 @@ This project is in the early stages of development. It's targeting .NET 4.5.1 an
 
 Roadmap for anyone keen to help out:
 
+ - [ ] Fix the build, once the latest (Beta 7) tooling refresh gets to AppVeyor
  - [ ] Tests, tests and more tests
  - [ ] Complete support for the parameters accepted to Influx's `/write` endpoint
  - [ ] Sampling support for counter metrics (i.e. aggregate values within a sampling interval)
