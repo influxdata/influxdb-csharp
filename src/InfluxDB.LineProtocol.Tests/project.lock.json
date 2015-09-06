@@ -3,14 +3,15 @@
   "version": 1,
   "targets": {
     ".NETPlatform,Version=v5.0": {
-      "InfluxDB.LineProtocol/1.0.0": {
+      "InfluxDB.LineProtocol/1.0.0-beta": {
         "type": "project",
         "dependencies": {
           "Microsoft.CSharp": "4.0.0-beta-23019",
           "System.Collections": "4.0.10-beta-23019",
+          "System.Console": "4.0.0-beta-23109",
           "System.Linq": "4.0.0-beta-23019",
           "System.Net.Http": "4.0.0-beta-23109",
-          "System.Runtime": "4.0.10-beta-23019",
+          "System.Runtime": "4.0.20-beta-23109",
           "System.Threading": "4.0.10-beta-23019"
         }
       },
@@ -58,6 +59,16 @@
         },
         "compile": {
           "ref/dotnet/System.Collections.Concurrent.dll": {}
+        }
+      },
+      "System.Console/4.0.0-beta-23109": {
+        "type": "package",
+        "dependencies": {
+          "System.IO": "4.0.0-beta-23109",
+          "System.Runtime": "4.0.0-beta-23109"
+        },
+        "compile": {
+          "ref/dotnet/System.Console.dll": {}
         }
       },
       "System.Diagnostics.Debug/4.0.10-beta-23019": {
@@ -396,7 +407,7 @@
     }
   },
   "libraries": {
-    "InfluxDB.LineProtocol/1.0.0": {
+    "InfluxDB.LineProtocol/1.0.0-beta": {
       "type": "project",
       "path": "../InfluxDB.LineProtocol/project.json"
     },
@@ -476,6 +487,30 @@
         "System.Collections.Concurrent.4.0.0.nupkg",
         "System.Collections.Concurrent.4.0.0.nupkg.sha512",
         "System.Collections.Concurrent.nuspec"
+      ]
+    },
+    "System.Console/4.0.0-beta-23109": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "ytlRZBI9ZoHiGwmyOg9bGlxvuGQ72YjKsjMWVfMOS57pupJySse2FHIAFMM3RShpY1y36/IUYVDjoPsFKuRn0Q==",
+      "files": [
+        "lib/DNXCore50/System.Console.dll",
+        "lib/net46/System.Console.dll",
+        "ref/dotnet/de/System.Console.xml",
+        "ref/dotnet/es/System.Console.xml",
+        "ref/dotnet/fr/System.Console.xml",
+        "ref/dotnet/it/System.Console.xml",
+        "ref/dotnet/ja/System.Console.xml",
+        "ref/dotnet/ko/System.Console.xml",
+        "ref/dotnet/ru/System.Console.xml",
+        "ref/dotnet/System.Console.dll",
+        "ref/dotnet/System.Console.xml",
+        "ref/dotnet/zh-hans/System.Console.xml",
+        "ref/dotnet/zh-hant/System.Console.xml",
+        "ref/net46/System.Console.dll",
+        "System.Console.4.0.0-beta-23109.nupkg",
+        "System.Console.4.0.0-beta-23109.nupkg.sha512",
+        "System.Console.nuspec"
       ]
     },
     "System.Diagnostics.Debug/4.0.10-beta-23019": {

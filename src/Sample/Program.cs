@@ -1,4 +1,5 @@
-﻿using InfluxDB.LineProtocol.Client;
+﻿using InfluxDB.LineProtocol;
+using InfluxDB.LineProtocol.Client;
 using InfluxDB.LineProtocol.Payload;
 using System;
 using System.Collections.Generic;
@@ -17,45 +18,28 @@ namespace Sample
 
         async Task Collect()
         {
-            var client = new LineProtocolClient(new Uri("http://192.168.99.100:8086"), "data");
-
             var process = Process.GetCurrentProcess();
 
-            var tags = new Dictionary<string, string>
-                {
-                    { "host", Environment.GetEnvironmentVariable("COMPUTERNAME") },
-                    { "os", Environment.GetEnvironmentVariable("OS") },
-                    { "process", Path.GetFileName(process.MainModule.FileName) }
-                };
+            Metrics.Collector = new CollectorConfiguration()
+                .Tag.With("host", Environment.GetEnvironmentVariable("COMPUTERNAME"))
+                .Tag.With("os", Environment.GetEnvironmentVariable("OS"))
+                .Tag.With("process", Path.GetFileName(process.MainModule.FileName))
+                .Batch.AtInterval(TimeSpan.FromSeconds(2))
+                .WriteTo.InfluxDB("http://192.168.99.100:8086", "data")
+                .CreateCollector();
 
             while (true)
             {
-                var now = DateTime.UtcNow;
+                Metrics.Increment("iterations");
 
-                var payload = new LineProtocolPayload();
-
-                payload.Add(new LineProtocolPoint(
-                    "cpu_time",
+                Metrics.Write("cpu_time",
                     new Dictionary<string, object>
                     {
                         { "value", process.TotalProcessorTime.TotalMilliseconds },
                         { "user", process.UserProcessorTime.TotalMilliseconds }
-                    },
-                    tags,
-                    now));
+                    });
 
-                payload.Add(new LineProtocolPoint(
-                    "working_set",
-                    new Dictionary<string, object>
-                    {
-                        { "value", process.WorkingSet64 },
-                    },
-                    tags,
-                    now));
-
-                var influxResult = await client.WriteAsync(payload);
-                if (!influxResult.Success)
-                    Console.Error.WriteLine(influxResult.ErrorMessage);
+                Metrics.Measure("working_set", process.WorkingSet64);
 
                 await Task.Delay(1000);
             }

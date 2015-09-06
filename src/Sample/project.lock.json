@@ -3,7 +3,7 @@
   "version": 1,
   "targets": {
     "DNX,Version=v4.5.1": {
-      "InfluxDB.LineProtocol/1.0.0": {
+      "InfluxDB.LineProtocol/1.0.0-beta": {
         "type": "project",
         "frameworkAssemblies": [
           "System.Collections",
@@ -14,14 +14,15 @@
       }
     },
     "DNXCore,Version=v5.0": {
-      "InfluxDB.LineProtocol/1.0.0": {
+      "InfluxDB.LineProtocol/1.0.0-beta": {
         "type": "project",
         "dependencies": {
           "Microsoft.CSharp": "4.0.0-beta-23019",
           "System.Collections": "4.0.10-beta-23019",
+          "System.Console": "4.0.0-beta-23109",
           "System.Linq": "4.0.0-beta-23019",
           "System.Net.Http": "4.0.0-beta-23109",
-          "System.Runtime": "4.0.10-beta-23019",
+          "System.Runtime": "4.0.20-beta-23109",
           "System.Threading": "4.0.10-beta-23019"
         }
       },
@@ -863,7 +864,7 @@
     }
   },
   "libraries": {
-    "InfluxDB.LineProtocol/1.0.0": {
+    "InfluxDB.LineProtocol/1.0.0-beta": {
       "type": "project",
       "path": "../InfluxDB.LineProtocol/project.json"
     },

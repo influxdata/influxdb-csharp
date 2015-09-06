@@ -41,6 +41,16 @@
           "ref/dotnet/System.Collections.dll": {}
         }
       },
+      "System.Console/4.0.0-beta-23109": {
+        "type": "package",
+        "dependencies": {
+          "System.IO": "4.0.0-beta-23109",
+          "System.Runtime": "4.0.0-beta-23109"
+        },
+        "compile": {
+          "ref/dotnet/System.Console.dll": {}
+        }
+      },
       "System.Diagnostics.Debug/4.0.10-beta-23019": {
         "type": "package",
         "dependencies": {
@@ -197,7 +207,7 @@
           "ref/dotnet/System.Resources.ResourceManager.dll": {}
         }
       },
-      "System.Runtime/4.0.10-beta-23019": {
+      "System.Runtime/4.0.20-beta-23109": {
         "type": "package",
         "compile": {
           "ref/dotnet/System.Runtime.dll": {}
@@ -294,6 +304,30 @@
         "System.Collections.4.0.10-beta-23019.nupkg",
         "System.Collections.4.0.10-beta-23019.nupkg.sha512",
         "System.Collections.nuspec"
+      ]
+    },
+    "System.Console/4.0.0-beta-23109": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "ytlRZBI9ZoHiGwmyOg9bGlxvuGQ72YjKsjMWVfMOS57pupJySse2FHIAFMM3RShpY1y36/IUYVDjoPsFKuRn0Q==",
+      "files": [
+        "lib/DNXCore50/System.Console.dll",
+        "lib/net46/System.Console.dll",
+        "ref/dotnet/de/System.Console.xml",
+        "ref/dotnet/es/System.Console.xml",
+        "ref/dotnet/fr/System.Console.xml",
+        "ref/dotnet/it/System.Console.xml",
+        "ref/dotnet/ja/System.Console.xml",
+        "ref/dotnet/ko/System.Console.xml",
+        "ref/dotnet/ru/System.Console.xml",
+        "ref/dotnet/System.Console.dll",
+        "ref/dotnet/System.Console.xml",
+        "ref/dotnet/zh-hans/System.Console.xml",
+        "ref/dotnet/zh-hant/System.Console.xml",
+        "ref/net46/System.Console.dll",
+        "System.Console.4.0.0-beta-23109.nupkg",
+        "System.Console.4.0.0-beta-23109.nupkg.sha512",
+        "System.Console.nuspec"
       ]
     },
     "System.Diagnostics.Debug/4.0.10-beta-23019": {
@@ -581,19 +615,29 @@
         "System.Resources.ResourceManager.nuspec"
       ]
     },
-    "System.Runtime/4.0.10-beta-23019": {
+    "System.Runtime/4.0.20-beta-23109": {
       "type": "package",
-      "sha512": "8/UWFt7a/s7snUtCE3j/DSRlm+iTuPCQ6N8uq4o99F9vuqdkMImmQEnqwirfVzkuprolgX48UOsZdt4zyJgRFQ==",
+      "serviceable": true,
+      "sha512": "6usAb6nZEPKugl3z5JR/RZrouH5/340n3tM0lhRfxVE/k3B3Sfh/sHSPiAOorrZgGm4cIDDhXTCGJQSWYphu3g==",
       "files": [
-        "lib/net451/_._",
-        "lib/win81/_._",
-        "License.rtf",
+        "lib/DNXCore50/System.Runtime.dll",
+        "lib/net46/_._",
+        "lib/netcore50/System.Runtime.dll",
+        "ref/dotnet/de/System.Runtime.xml",
+        "ref/dotnet/es/System.Runtime.xml",
+        "ref/dotnet/fr/System.Runtime.xml",
+        "ref/dotnet/it/System.Runtime.xml",
+        "ref/dotnet/ja/System.Runtime.xml",
+        "ref/dotnet/ko/System.Runtime.xml",
+        "ref/dotnet/ru/System.Runtime.xml",
         "ref/dotnet/System.Runtime.dll",
-        "ref/net451/_._",
-        "ref/netcore50/System.Runtime.dll",
-        "ref/win81/_._",
-        "System.Runtime.4.0.10-beta-23019.nupkg",
-        "System.Runtime.4.0.10-beta-23019.nupkg.sha512",
+        "ref/dotnet/System.Runtime.xml",
+        "ref/dotnet/zh-hans/System.Runtime.xml",
+        "ref/dotnet/zh-hant/System.Runtime.xml",
+        "ref/net46/_._",
+        "runtimes/win8-aot/lib/netcore50/System.Runtime.dll",
+        "System.Runtime.4.0.20-beta-23109.nupkg",
+        "System.Runtime.4.0.20-beta-23109.nupkg.sha512",
         "System.Runtime.nuspec"
       ]
     },
@@ -753,9 +797,10 @@
       "System.Collections >= 4.0.10-beta-23019",
       "System.Linq >= 4.0.0-beta-23019",
       "System.Threading >= 4.0.10-beta-23019",
-      "System.Runtime >= 4.0.10-beta-23019",
+      "System.Runtime >= 4.0.20-beta-23109",
       "Microsoft.CSharp >= 4.0.0-beta-23019",
-      "System.Net.Http >= 4.0.0-beta-23109"
+      "System.Net.Http >= 4.0.0-beta-23109",
+      "System.Console >= 4.0.0-beta-23109"
     ]
   }
 }
