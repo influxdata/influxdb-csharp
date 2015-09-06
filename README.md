@@ -4,8 +4,6 @@ This is a C# implementation of the [InfluxDB](http://influxdb.org) ingestion ['L
 
 You can use it to write time series data to InfluxDB version 0.9.3+ over HTTP or HTTPS.
 
-The initial goal of this package is to create a straightforward and efficient .NET binding to the protocol, with a minimum of syntactic sugar. Once that's complete, a "friendly" metrics collection API may be added on top of the basic functionality. 
-
 Supporting the full/read API of InfluxDB is an explicit _non-goal_: this package will be kept small so as to have a minimal footprint when used in client applications.
 
 ## Getting Started
@@ -13,11 +11,41 @@ Supporting the full/read API of InfluxDB is an explicit _non-goal_: this package
 Install the _InfluxDB.LineProtocol_ NuGet package and add `using` statements where needed:
 
 ```csharp
-using InfluxDB.LineProtocol.Client;
-using InfluxDB.LineProtocol.Payload;
+using InfluxDB.LineProtocol;
 ```
 
-Create a `LineProtocolPayload` containing a batch of `LineProtocolPoint`s. Each point carries the measurement name, at least one value, an optional set of tags and an optional timestamp:
+Configure a `MetricsCollector`. These can be used directly, or via the static `Metrics` class:
+
+```csharp
+Metrics.Collector = new CollectorConfiguration()
+    .Tag.With("host", Environment.GetEnvironmentVariable("COMPUTERNAME"))
+    .Batch.AtInterval(TimeSpan.FromSeconds(2))
+    .WriteTo.InfluxDB("http://192.168.99.100:8086", "data")
+    .CreateCollector();
+```
+
+Send points using the methods of `MetricsCollector` or `Metrics`:
+
+```csharp
+Metrics.Increment("iterations");
+
+Metrics.Write("cpu_time",
+    new Dictionary<string, object>
+    {
+        { "value", process.TotalProcessorTime.TotalMilliseconds },
+        { "user", process.UserProcessorTime.TotalMilliseconds }
+    });
+
+Metrics.Measure("working_set", process.WorkingSet64);
+```
+
+View aggregated metrics in a dashboarding interface such as [Grafana](http://grafana.org).
+
+## Raw Client API
+
+The raw API is a very thin wrapper on InfluxDB's HTTP API.
+
+To send points, create a `LineProtocolPayload` containing a batch of `LineProtocolPoint`s. Each point carries the measurement name, at least one value, an optional set of tags and an optional timestamp:
 
 ```csharp
 var cpuTime = new LineProtocolPoint(
@@ -42,6 +70,7 @@ payload.Add(cpuTime);
 Write the points to InfluxDB, specifying the server's base URL, database name, and an optional username and password:
 
 ```csharp
+var client = new LineProtocolClient("http://my-server:8086", "data");
 var influxResult = await client.WriteAsync(payload);
 if (!influxResult.Success)
     Console.Error.WriteLine(influxResult.ErrorMessage);
@@ -55,4 +84,4 @@ Roadmap for anyone keen to help out:
 
  - [ ] Tests, tests and more tests
  - [ ] Complete support for the parameters accepted to Influx's `/write` endpoint
- - [ ] Possibly a "friendlier" metrics API on top of `LineProtocolClient` and `LineProtocolPayload`
+ - [ ] Sampling support for counter metrics (i.e. aggregate values within a sampling interval)
