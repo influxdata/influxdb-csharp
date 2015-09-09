@@ -5,16 +5,21 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{72DC28B9-37B5-425C-8532-5CA91D253A70}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{35451F76-443F-442E-BE7E-23020DA3F0C5}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "global", "global", "{35451F76-443F-442E-BE7E-23020DA3F0C5}"
 	ProjectSection(SolutionItems) = preProject
 		global.json = global.json
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "InfluxDB.LineProtocol", "src\InfluxDB.LineProtocol\InfluxDB.LineProtocol.xproj", "{069E0AC5-A2CF-4584-89A7-F475276E244C}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "InfluxDB.LineProtocol.Tests", "src\InfluxDB.LineProtocol.Tests\InfluxDB.LineProtocol.Tests.xproj", "{34173CA2-1551-4E46-B8E7-E4629A48E415}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "InfluxDB.LineProtocol.Tests", "test\InfluxDB.LineProtocol.Tests\InfluxDB.LineProtocol.Tests.xproj", "{34173CA2-1551-4E46-B8E7-E4629A48E415}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Sample", "src\Sample\Sample.xproj", "{DC6028D6-ED1D-4857-B5EB-28BA05E3F531}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Sample", "sample\Sample\Sample.xproj", "{DC6028D6-ED1D-4857-B5EB-28BA05E3F531}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{75C71D21-E6FD-493F-A355-997EEF4DDF11}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sample", "sample", "{CD65EE64-FDA8-4ED9-A7F2-81BDD9F64C64}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,7 +45,7 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{069E0AC5-A2CF-4584-89A7-F475276E244C} = {72DC28B9-37B5-425C-8532-5CA91D253A70}
-		{34173CA2-1551-4E46-B8E7-E4629A48E415} = {72DC28B9-37B5-425C-8532-5CA91D253A70}
-		{DC6028D6-ED1D-4857-B5EB-28BA05E3F531} = {72DC28B9-37B5-425C-8532-5CA91D253A70}
+		{34173CA2-1551-4E46-B8E7-E4629A48E415} = {75C71D21-E6FD-493F-A355-997EEF4DDF11}
+		{DC6028D6-ED1D-4857-B5EB-28BA05E3F531} = {CD65EE64-FDA8-4ED9-A7F2-81BDD9F64C64}
 	EndGlobalSection
 EndGlobal
