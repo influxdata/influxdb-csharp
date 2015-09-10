@@ -53,7 +53,7 @@ namespace InfluxDB.LineProtocol
                     disposeBatcher();
 
                 if (disposeEmitter != null)
-                    disposeBatcher();
+                    disposeEmitter();
             });
         }
     }
