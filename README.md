@@ -8,7 +8,13 @@ Supporting the full/read API of InfluxDB is an explicit _non-goal_: this package
 
 ## Getting Started
 
-Install the _InfluxDB.LineProtocol_ NuGet package and add `using` statements where needed:
+Install the _InfluxDB.LineProtocol_ NuGet package:
+
+```powershell
+Install-Package InfluxDB.LineProtocol -Pre
+```
+
+Add `using` statements where needed:
 
 ```csharp
 using InfluxDB.LineProtocol;
