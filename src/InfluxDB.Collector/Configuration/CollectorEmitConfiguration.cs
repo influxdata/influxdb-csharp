@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace InfluxDB.LineProtocol.Collector
+namespace InfluxDB.Collector.Configuration
 {
     public abstract class CollectorEmitConfiguration
     {

@@ -1,8 +1,9 @@
-﻿using InfluxDB.LineProtocol.Collector;
+﻿using InfluxDB.Collector.Configuration;
 using System;
 using System.Collections.Generic;
+using InfluxDB.Collector.Pipeline;
 
-namespace InfluxDB.LineProtocol
+namespace InfluxDB.Collector
 {
     public static class Metrics
     {
@@ -13,7 +14,7 @@ namespace InfluxDB.LineProtocol
             get { return CurrentCollector; }
             set
             {
-                if (value == null) throw new ArgumentNullException("value");
+                if (value == null) throw new ArgumentNullException(nameof(value));
                 CurrentCollector = value;
             }
         }

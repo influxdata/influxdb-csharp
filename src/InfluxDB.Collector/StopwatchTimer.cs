@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace InfluxDB.LineProtocol.Collector
+namespace InfluxDB.Collector
 {
     class StopwatchTimer : IDisposable
     {

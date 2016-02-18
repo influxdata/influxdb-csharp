@@ -2,9 +2,41 @@
   "locked": false,
   "version": 2,
   "targets": {
-    ".NETFramework,Version=v4.5": {},
-    "DNX,Version=v4.5.1": {},
+    ".NETFramework,Version=v4.5": {
+      "InfluxDB.LineProtocol/1.0.0-beta": {
+        "type": "project",
+        "framework": ".NETFramework,Version=v4.5",
+        "frameworkAssemblies": [
+          "System.Net.Http"
+        ]
+      }
+    },
+    "DNX,Version=v4.5.1": {
+      "InfluxDB.LineProtocol/1.0.0-beta": {
+        "type": "project",
+        "framework": "DNX,Version=v4.5.1",
+        "frameworkAssemblies": [
+          "System.Collections",
+          "System.IO",
+          "System.Net.Http",
+          "System.Runtime"
+        ]
+      }
+    },
     ".NETPlatform,Version=v5.0": {
+      "InfluxDB.LineProtocol/1.0.0-beta": {
+        "type": "project",
+        "framework": ".NETPlatform,Version=v5.0",
+        "dependencies": {
+          "Microsoft.CSharp": "4.0.0-beta-23019",
+          "System.Collections": "4.0.10-beta-23019",
+          "System.Console": "4.0.0-beta-23109",
+          "System.Linq": "4.0.0-beta-23019",
+          "System.Net.Http": "4.0.0-beta-23109",
+          "System.Runtime": "4.0.20-beta-23109",
+          "System.Threading": "4.0.10-beta-23019"
+        }
+      },
       "Microsoft.CSharp/4.0.0-beta-23019": {
         "type": "package",
         "dependencies": {
@@ -272,11 +304,62 @@
         }
       }
     },
-    ".NETFramework,Version=v4.5/win7-x86": {},
-    ".NETFramework,Version=v4.5/win7-x64": {},
-    "DNX,Version=v4.5.1/win7-x86": {},
-    "DNX,Version=v4.5.1/win7-x64": {},
+    ".NETFramework,Version=v4.5/win7-x86": {
+      "InfluxDB.LineProtocol/1.0.0-beta": {
+        "type": "project",
+        "framework": ".NETFramework,Version=v4.5",
+        "frameworkAssemblies": [
+          "System.Net.Http"
+        ]
+      }
+    },
+    ".NETFramework,Version=v4.5/win7-x64": {
+      "InfluxDB.LineProtocol/1.0.0-beta": {
+        "type": "project",
+        "framework": ".NETFramework,Version=v4.5",
+        "frameworkAssemblies": [
+          "System.Net.Http"
+        ]
+      }
+    },
+    "DNX,Version=v4.5.1/win7-x86": {
+      "InfluxDB.LineProtocol/1.0.0-beta": {
+        "type": "project",
+        "framework": "DNX,Version=v4.5.1",
+        "frameworkAssemblies": [
+          "System.Collections",
+          "System.IO",
+          "System.Net.Http",
+          "System.Runtime"
+        ]
+      }
+    },
+    "DNX,Version=v4.5.1/win7-x64": {
+      "InfluxDB.LineProtocol/1.0.0-beta": {
+        "type": "project",
+        "framework": "DNX,Version=v4.5.1",
+        "frameworkAssemblies": [
+          "System.Collections",
+          "System.IO",
+          "System.Net.Http",
+          "System.Runtime"
+        ]
+      }
+    },
     ".NETPlatform,Version=v5.0/win7-x86": {
+      "InfluxDB.LineProtocol/1.0.0-beta": {
+        "type": "project",
+        "framework": ".NETPlatform,Version=v5.0",
+        "dependencies": {
+          "Microsoft.CSharp": "4.0.0-beta-23019",
+          "System.Collections": "4.0.10-beta-23019",
+          "System.Console": "4.0.0-beta-23109",
+          "System.Linq": "4.0.0-beta-23019",
+          "System.Net.Http": "4.0.0-beta-23109",
+          "System.Runtime": "4.0.20-beta-23109",
+          "System.Threading": "4.0.10-beta-23019"
+        }
+      },
       "Microsoft.CSharp/4.0.0-beta-23019": {
         "type": "package",
         "dependencies": {
@@ -545,6 +628,19 @@
       }
     },
     ".NETPlatform,Version=v5.0/win7-x64": {
+      "InfluxDB.LineProtocol/1.0.0-beta": {
+        "type": "project",
+        "framework": ".NETPlatform,Version=v5.0",
+        "dependencies": {
+          "Microsoft.CSharp": "4.0.0-beta-23019",
+          "System.Collections": "4.0.10-beta-23019",
+          "System.Console": "4.0.0-beta-23109",
+          "System.Linq": "4.0.0-beta-23019",
+          "System.Net.Http": "4.0.0-beta-23109",
+          "System.Runtime": "4.0.20-beta-23109",
+          "System.Threading": "4.0.10-beta-23019"
+        }
+      },
       "Microsoft.CSharp/4.0.0-beta-23019": {
         "type": "package",
         "dependencies": {
@@ -814,6 +910,10 @@
     }
   },
   "libraries": {
+    "InfluxDB.LineProtocol/1.0.0-beta": {
+      "type": "project",
+      "path": "../InfluxDB.LineProtocol/project.json"
+    },
     "Microsoft.CSharp/4.0.0-beta-23019": {
       "type": "package",
       "sha512": "wp5SlNCIXAFqPbWMOAD8eedaPA1vPyBSh6P/OZUaSab4ogrFdElpHVoW+wTicbXLVJcvQwp1Jtk9xP5Slmq4EA==",
@@ -1323,7 +1423,9 @@
     }
   },
   "projectFileDependencyGroups": {
-    "": [],
+    "": [
+      "InfluxDB.LineProtocol "
+    ],
     ".NETFramework,Version=v4.5": [
       "fx/System.Net.Http >= 4.0.0"
     ],

@@ -1,4 +1,4 @@
-﻿namespace InfluxDB.LineProtocol.Collector
+﻿namespace InfluxDB.Collector.Platform
 {
     enum PortableTimerState
     {

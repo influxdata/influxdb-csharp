@@ -1,16 +1,17 @@
-﻿using InfluxDB.LineProtocol.Client;
+﻿using System;
+using InfluxDB.Collector.Diagnostics;
+using InfluxDB.LineProtocol.Client;
 using InfluxDB.LineProtocol.Payload;
-using System;
 
-namespace InfluxDB.LineProtocol.Collector
+namespace InfluxDB.Collector.Pipeline.Emit
 {
-    class InfluxDBEmitter : IDisposable, IPointEmitter
+    class HttpLineProtocolEmitter : IDisposable, IPointEmitter
     {
         readonly LineProtocolClient _client;
 
-        public InfluxDBEmitter(LineProtocolClient client)
+        public HttpLineProtocolEmitter(LineProtocolClient client)
         {
-            if (client == null) throw new ArgumentNullException("client");
+            if (client == null) throw new ArgumentNullException(nameof(client));
             _client = client;
         }
 

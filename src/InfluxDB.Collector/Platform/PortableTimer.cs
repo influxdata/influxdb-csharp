@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace InfluxDB.LineProtocol.Collector
+namespace InfluxDB.Collector.Platform
 {
     class PortableTimer : IDisposable
     {
@@ -14,13 +14,13 @@ namespace InfluxDB.LineProtocol.Collector
 
         public PortableTimer(Action<CancellationToken> onTick)
         {
-            if (onTick == null) throw new ArgumentNullException("onTick");
+            if (onTick == null) throw new ArgumentNullException(nameof(onTick));
             _onTick = onTick;
         }
 
         public async void Start(TimeSpan interval)
         {
-            if (interval < TimeSpan.Zero) throw new ArgumentOutOfRangeException("interval");
+            if (interval < TimeSpan.Zero) throw new ArgumentOutOfRangeException(nameof(interval));
 
             lock (_stateLock)
             {

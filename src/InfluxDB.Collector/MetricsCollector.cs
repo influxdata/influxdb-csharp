@@ -1,8 +1,10 @@
-﻿using InfluxDB.LineProtocol.Collector;
+﻿using InfluxDB.Collector.Configuration;
 using System;
 using System.Collections.Generic;
+using InfluxDB.Collector.Diagnostics;
+using InfluxDB.Collector.Pipeline;
 
-namespace InfluxDB.LineProtocol
+namespace InfluxDB.Collector
 {
     public abstract class MetricsCollector : IPointEmitter, IDisposable
     {

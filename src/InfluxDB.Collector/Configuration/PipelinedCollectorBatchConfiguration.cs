@@ -1,6 +1,8 @@
 ﻿using System;
+using InfluxDB.Collector.Pipeline;
+using InfluxDB.Collector.Pipeline.Batch;
 
-namespace InfluxDB.LineProtocol.Collector
+namespace InfluxDB.Collector.Configuration
 {
     class PipelinedCollectorBatchConfiguration : CollectorBatchConfiguration
     {
@@ -9,7 +11,7 @@ namespace InfluxDB.LineProtocol.Collector
 
         public PipelinedCollectorBatchConfiguration(CollectorConfiguration configuration)
         {
-            if (configuration == null) throw new ArgumentNullException("configuration");
+            if (configuration == null) throw new ArgumentNullException(nameof(configuration));
             _configuration = configuration;
         }
 

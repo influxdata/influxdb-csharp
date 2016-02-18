@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace InfluxDB.LineProtocol.Collector
+namespace InfluxDB.Collector.Diagnostics
 {
     public static class CollectorLog
     {

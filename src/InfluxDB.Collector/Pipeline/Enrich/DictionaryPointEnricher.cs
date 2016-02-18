@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace InfluxDB.LineProtocol.Collector
+namespace InfluxDB.Collector.Pipeline.Enrich
 {
     class DictionaryPointEnricher : IPointEnricher
     {

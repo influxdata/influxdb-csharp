@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using InfluxDB.Collector.Diagnostics;
+using InfluxDB.Collector.Platform;
 
-namespace InfluxDB.LineProtocol.Collector
+namespace InfluxDB.Collector.Pipeline.Batch
 {
     class IntervalBatcher : IPointEmitter, IDisposable
     {

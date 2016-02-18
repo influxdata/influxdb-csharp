@@ -1,6 +1,4 @@
-﻿using InfluxDB.LineProtocol;
-using InfluxDB.LineProtocol.Client;
-using InfluxDB.LineProtocol.Payload;
+﻿using InfluxDB.Collector;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace InfluxDB.LineProtocol.Collector
+namespace InfluxDB.Collector.Pipeline
 {
     public class PointData
     {
@@ -17,8 +17,8 @@ namespace InfluxDB.LineProtocol.Collector
             IReadOnlyDictionary<string, string> tags = null,
             DateTime? utcTimestamp = null)
         {
-            if (measurement == null) throw new ArgumentNullException("measurement");
-            if (fields == null) throw new ArgumentNullException("fields");
+            if (measurement == null) throw new ArgumentNullException(nameof(measurement));
+            if (fields == null) throw new ArgumentNullException(nameof(fields));
             Measurement = measurement;
             Fields = fields.ToDictionary(kv => kv.Key, kv => kv.Value);
             if (tags != null)

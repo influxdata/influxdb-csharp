@@ -27,7 +27,7 @@ namespace InfluxDB.LineProtocol.Payload
 
         public static string EscapeName(string nameOrKey)
         {
-            if (nameOrKey == null) throw new ArgumentNullException("nameOrKey");
+            if (nameOrKey == null) throw new ArgumentNullException(nameof(nameOrKey));
             return nameOrKey
                 .Replace("=", "\\=")
                 .Replace(" ", "\\ ")

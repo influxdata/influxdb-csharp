@@ -1,7 +1,7 @@
 ﻿
 using System;
 
-namespace InfluxDB.LineProtocol.Collector
+namespace InfluxDB.Collector.Pipeline
 {
     class PipelinedMetricsCollector : MetricsCollector
     {

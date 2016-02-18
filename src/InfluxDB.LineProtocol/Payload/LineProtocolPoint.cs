@@ -39,7 +39,7 @@ namespace InfluxDB.LineProtocol.Payload
 
         public void Format(TextWriter textWriter)
         {
-            if (textWriter == null) throw new ArgumentNullException("textWriter");
+            if (textWriter == null) throw new ArgumentNullException(nameof(textWriter));
 
             textWriter.Write(LineProtocolSyntax.EscapeName(Measurement));
 

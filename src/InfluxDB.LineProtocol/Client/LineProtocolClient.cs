@@ -15,7 +15,7 @@ namespace InfluxDB.LineProtocol.Client
 
         public LineProtocolClient(Uri serverBaseAddress, string database, string username = null, string password = null)
         {
-            if (serverBaseAddress == null) throw new ArgumentNullException("serverBaseAddress");
+            if (serverBaseAddress == null) throw new ArgumentNullException(nameof(serverBaseAddress));
             if (string.IsNullOrEmpty(database)) throw new ArgumentException("A database must be specified");
 
             _httpClient = new HttpClient { BaseAddress = serverBaseAddress };

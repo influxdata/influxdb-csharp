@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using InfluxDB.Collector.Pipeline;
+using InfluxDB.Collector.Pipeline.Enrich;
 
-namespace InfluxDB.LineProtocol.Collector
+namespace InfluxDB.Collector.Configuration
 {
     class PipelinedCollectorTagConfiguration : CollectorTagConfiguration
     {
@@ -10,7 +12,7 @@ namespace InfluxDB.LineProtocol.Collector
 
         public PipelinedCollectorTagConfiguration(CollectorConfiguration configuration)
         {
-            if (configuration == null) throw new ArgumentNullException("configuration");
+            if (configuration == null) throw new ArgumentNullException(nameof(configuration));
             _configuration = configuration;
         }
 

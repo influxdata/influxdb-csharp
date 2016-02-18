@@ -1,4 +1,4 @@
-﻿namespace InfluxDB.LineProtocol.Collector
+﻿namespace InfluxDB.Collector.Pipeline
 {
     class NullMetricsCollector : MetricsCollector
     {

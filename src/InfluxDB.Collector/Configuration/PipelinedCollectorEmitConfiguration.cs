@@ -1,7 +1,9 @@
 ﻿using InfluxDB.LineProtocol.Client;
 using System;
+using InfluxDB.Collector.Pipeline;
+using InfluxDB.Collector.Pipeline.Emit;
 
-namespace InfluxDB.LineProtocol.Collector
+namespace InfluxDB.Collector.Configuration
 {
     class PipelinedCollectorEmitConfiguration : CollectorEmitConfiguration
     {
@@ -10,7 +12,7 @@ namespace InfluxDB.LineProtocol.Collector
 
         public PipelinedCollectorEmitConfiguration(CollectorConfiguration configuration)
         {
-            if (configuration == null) throw new ArgumentNullException("configuration");
+            if (configuration == null) throw new ArgumentNullException(nameof(configuration));
             _configuration = configuration;
         }
 
@@ -31,7 +33,7 @@ namespace InfluxDB.LineProtocol.Collector
                 return parent;
             }
 
-            var emitter = new InfluxDBEmitter(_client);
+            var emitter = new HttpLineProtocolEmitter(_client);
             dispose = emitter.Dispose;
             return emitter;
         }

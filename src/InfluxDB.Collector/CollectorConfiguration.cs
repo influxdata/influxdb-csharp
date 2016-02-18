@@ -1,7 +1,8 @@
-﻿using InfluxDB.LineProtocol.Collector;
+﻿using InfluxDB.Collector.Configuration;
 using System;
+using InfluxDB.Collector.Pipeline;
 
-namespace InfluxDB.LineProtocol
+namespace InfluxDB.Collector
 {
     public class CollectorConfiguration
     {
@@ -23,20 +24,11 @@ namespace InfluxDB.LineProtocol
             _batcher = new PipelinedCollectorBatchConfiguration(this);
         }
 
-        public CollectorTagConfiguration Tag
-        {
-            get { return _tag; }
-        }
+        public CollectorTagConfiguration Tag => _tag;
 
-        public CollectorEmitConfiguration WriteTo
-        {
-            get { return _emitter; }
-        }
+        public CollectorEmitConfiguration WriteTo => _emitter;
 
-        public CollectorBatchConfiguration Batch
-        {
-            get { return _batcher; }
-        }
+        public CollectorBatchConfiguration Batch => _batcher;
 
         public MetricsCollector CreateCollector()
         {

@@ -10,13 +10,13 @@ namespace InfluxDB.LineProtocol.Payload
 
         public void Add(LineProtocolPoint point)
         {
-            if (point == null) throw new ArgumentNullException("point");
+            if (point == null) throw new ArgumentNullException(nameof(point));
             _points.Add(point);
         }
 
         public void Format(TextWriter textWriter)
         {
-            if (textWriter == null) throw new ArgumentNullException("textWriter");
+            if (textWriter == null) throw new ArgumentNullException(nameof(textWriter));
 
             foreach (var point in _points)
             {

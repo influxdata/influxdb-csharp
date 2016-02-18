@@ -7,7 +7,8 @@
   "licenseUrl": "",
 
   "dependencies": {
-    "InfluxDB.LineProtocol": "1.0.0-*"
+    "InfluxDB.LineProtocol": { "target": "project" },
+    "InfluxDB.Collector": { "target": "project" }
   },
 
   "commands": {
