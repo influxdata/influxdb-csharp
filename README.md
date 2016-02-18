@@ -2,7 +2,10 @@
 
 This is a C# implementation of the [InfluxDB](http://influxdb.org) ingestion ['Line Protocol'](https://influxdb.com/docs/v0.9/write_protocols/line.html).
 
-You can use it to write time series data to InfluxDB version 0.9.3+ over HTTP or HTTPS.
+You can use it to write time series data to InfluxDB version 0.9.3+ over HTTP or HTTPS. Two packages are provided:
+
+ * A higher-level metrics-oriented API described in _Getting Started_ below
+ * A bare-bones HTTP line protocol client, described in the _Raw Client API_ section
 
 Supporting the full/read API of InfluxDB is an explicit _non-goal_: this package will be kept small so as to have a minimal footprint when used in client applications.
 
