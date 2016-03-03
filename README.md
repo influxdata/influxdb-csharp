@@ -2,22 +2,25 @@
 
 This is a C# implementation of the [InfluxDB](http://influxdb.org) ingestion ['Line Protocol'](https://influxdb.com/docs/v0.9/write_protocols/line.html).
 
-You can use it to write time series data to InfluxDB version 0.9.3+ over HTTP or HTTPS.
+You can use it to write time series data to InfluxDB version 0.9.3+ over HTTP or HTTPS. Two packages are provided:
+
+ * A higher-level metrics-oriented API described in _Getting Started_ below
+ * A bare-bones HTTP line protocol client, described in the _Raw Client API_ section
 
 Supporting the full/read API of InfluxDB is an explicit _non-goal_: this package will be kept small so as to have a minimal footprint when used in client applications.
 
 ## Getting Started
 
-Install the _InfluxDB.LineProtocol_ NuGet package:
+Install the _InfluxDB.Collector_ NuGet package:
 
 ```powershell
-Install-Package InfluxDB.LineProtocol -Pre
+Install-Package InfluxDB.Collector -Pre
 ```
 
 Add `using` statements where needed:
 
 ```csharp
-using InfluxDB.LineProtocol;
+using InfluxDB.Collector;
 ```
 
 Configure a `MetricsCollector`. These can be used directly, or via the static `Metrics` class:
@@ -49,7 +52,11 @@ View aggregated metrics in a dashboarding interface such as [Grafana](http://gra
 
 ## Raw Client API
 
-The raw API is a very thin wrapper on InfluxDB's HTTP API.
+The raw API is a very thin wrapper on InfluxDB's HTTP API, in the _InfluxDB.LineProtocol_ package.
+
+```powershell
+Install-Package InfluxDB.LineProtocol -Pre
+```
 
 To send points, create a `LineProtocolPayload` containing a batch of `LineProtocolPoint`s. Each point carries the measurement name, at least one value, an optional set of tags and an optional timestamp:
 
@@ -86,13 +93,13 @@ if (!influxResult.Success)
 
 This project is in the early stages of development. It's targeting .NET 4.5.1 and the modern .NET platform using Visual Studio 2015 and the 'DNX' tooling.
 
-Roadmap for anyone keen to help out:
+Roadmap for anyone keen to help out - contributions are welcome :-)
 
- - [ ] Fix the build, once the latest (Beta 7) tooling refresh gets to AppVeyor
+ - [x] Fix the build, once the latest (Beta 7) tooling refresh gets to AppVeyor
  - [ ] Tests, tests and more tests
  - [ ] Complete support for the parameters accepted to Influx's `/write` endpoint
  - [ ] Sampling support for counter metrics (i.e. aggregate values within a sampling interval)
- - [ ] Split the metrics collection facilities out into a separate package that uses the base Line Protocol package
+ - [x] Split the metrics collection facilities out into a separate package that uses the base Line Protocol package
  - [ ] Smarter batching
  - [ ] Better `Metrics.Close()`/`MetricsCollector.Dispose()`
  - [ ] Generally give some attention to performance
