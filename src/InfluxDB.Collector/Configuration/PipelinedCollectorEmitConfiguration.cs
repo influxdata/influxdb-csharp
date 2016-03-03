@@ -1,5 +1,7 @@
 ﻿using InfluxDB.LineProtocol.Client;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using InfluxDB.Collector.Pipeline;
 using InfluxDB.Collector.Pipeline.Emit;
 
@@ -8,6 +10,7 @@ namespace InfluxDB.Collector.Configuration
     class PipelinedCollectorEmitConfiguration : CollectorEmitConfiguration
     {
         readonly CollectorConfiguration _configuration;
+        readonly List<Action<PointData[]>> _emitters = new List<Action<PointData[]>>();
         LineProtocolClient _client;
 
         public PipelinedCollectorEmitConfiguration(CollectorConfiguration configuration)
@@ -22,20 +25,43 @@ namespace InfluxDB.Collector.Configuration
             return _configuration;
         }
 
+        public override CollectorConfiguration Emitter(Action<PointData[]> emitter)
+        {
+            if (emitter == null) throw new ArgumentNullException(nameof(emitter));
+            _emitters.Add(emitter);
+            return _configuration;
+        }
+
         public IPointEmitter CreateEmitter(IPointEmitter parent, out Action dispose)
         {
-            if (parent != null)
-                throw new ArgumentException("Parent may not be specified here");
-
-            if (_client == null)
+            if (_client == null && !_emitters.Any())
             {
                 dispose = null;
                 return parent;
             }
 
-            var emitter = new HttpLineProtocolEmitter(_client);
-            dispose = emitter.Dispose;
-            return emitter;
+            if (parent != null)
+                throw new ArgumentException("Parent may not be specified here");
+
+            var result = new List<IPointEmitter>();
+
+            if (_client != null)
+            {
+                var emitter = new HttpLineProtocolEmitter(_client);
+                dispose = emitter.Dispose;
+                result.Add(emitter);
+            }
+            else
+            {
+                dispose = () => { };
+            }
+
+            foreach (var emitter in _emitters)
+            {
+                result.Add(new DelegateEmitter(emitter));
+            }
+
+            return new AggregateEmitter(result);
         }
     }
 }

@@ -3,6 +3,19 @@
   "version": 2,
   "targets": {
     "DNX,Version=v4.5.1": {
+      "InfluxDB.Collector/1.0.0-beta": {
+        "type": "project",
+        "framework": "DNX,Version=v4.5.1",
+        "dependencies": {
+          "InfluxDB.LineProtocol": null
+        },
+        "frameworkAssemblies": [
+          "System.Collections",
+          "System.IO",
+          "System.Net.Http",
+          "System.Runtime"
+        ]
+      },
       "InfluxDB.LineProtocol/1.0.0-beta": {
         "type": "project",
         "framework": "DNX,Version=v4.5.1",
@@ -254,6 +267,19 @@
       }
     },
     "DNX,Version=v4.5.1/win7-x86": {
+      "InfluxDB.Collector/1.0.0-beta": {
+        "type": "project",
+        "framework": "DNX,Version=v4.5.1",
+        "dependencies": {
+          "InfluxDB.LineProtocol": null
+        },
+        "frameworkAssemblies": [
+          "System.Collections",
+          "System.IO",
+          "System.Net.Http",
+          "System.Runtime"
+        ]
+      },
       "InfluxDB.LineProtocol/1.0.0-beta": {
         "type": "project",
         "framework": "DNX,Version=v4.5.1",
@@ -505,6 +531,19 @@
       }
     },
     "DNX,Version=v4.5.1/win7-x64": {
+      "InfluxDB.Collector/1.0.0-beta": {
+        "type": "project",
+        "framework": "DNX,Version=v4.5.1",
+        "dependencies": {
+          "InfluxDB.LineProtocol": null
+        },
+        "frameworkAssemblies": [
+          "System.Collections",
+          "System.IO",
+          "System.Net.Http",
+          "System.Runtime"
+        ]
+      },
       "InfluxDB.LineProtocol/1.0.0-beta": {
         "type": "project",
         "framework": "DNX,Version=v4.5.1",
@@ -757,6 +796,10 @@
     }
   },
   "libraries": {
+    "InfluxDB.Collector/1.0.0-beta": {
+      "type": "project",
+      "path": "../../src/InfluxDB.Collector/project.json"
+    },
     "InfluxDB.LineProtocol/1.0.0-beta": {
       "type": "project",
       "path": "../../src/InfluxDB.LineProtocol/project.json"
@@ -1056,7 +1099,8 @@
     "": [
       "xunit >= 2.1.0-*",
       "xunit.runner.dnx >= 2.1.0-*",
-      "InfluxDB.LineProtocol >= 1.0.0-*"
+      "InfluxDB.LineProtocol >= 1.0.0-*",
+      "InfluxDB.Collector >= 1.0.0-*"
     ],
     "DNX,Version=v4.5.1": [
       "fx/System.Runtime >= 4.0.10",
