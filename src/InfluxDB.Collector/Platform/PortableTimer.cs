@@ -37,7 +37,14 @@ namespace InfluxDB.Collector.Platform
 
             try
             {
-                await Task.Delay(interval, _cancel.Token);
+                if (!_cancel.Token.IsCancellationRequested)
+                {
+                    await Task.Delay(interval, _cancel.Token);
+                }
+            }
+            catch (TaskCanceledException) when (_cancel.IsCancellationRequested)
+            {
+                // currently disposing
             }
             finally
             {
