@@ -37,9 +37,14 @@ namespace InfluxDB.Collector
 
         public void Write(string measurement, IReadOnlyDictionary<string, object> fields, IReadOnlyDictionary<string, string> tags = null)
         {
+            Write(measurement, DateTime.UtcNow, fields, tags);
+        }
+
+        public void Write(string measurement, DateTime timestamp, IReadOnlyDictionary<string, object> fields, IReadOnlyDictionary<string, string> tags = null)
+        {
             try
             {
-                var point = new PointData(measurement, fields, tags, DateTime.UtcNow);
+                var point = new PointData(measurement, fields, tags, timestamp);
                 Emit(new[] { point });
             }
             catch (Exception ex)
