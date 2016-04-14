@@ -35,11 +35,11 @@ namespace InfluxDB.Collector
 
         protected virtual void Dispose(bool disposing) { }
 
-        public void Write(string measurement, IReadOnlyDictionary<string, object> fields, IReadOnlyDictionary<string, string> tags = null)
+        public void Write(string measurement, IReadOnlyDictionary<string, object> fields, IReadOnlyDictionary<string, string> tags = null, DateTime? timestamp = null)
         {
             try
             {
-                var point = new PointData(measurement, fields, tags, DateTime.UtcNow);
+                var point = new PointData(measurement, fields, tags, timestamp ?? DateTime.UtcNow);
                 Emit(new[] { point });
             }
             catch (Exception ex)
