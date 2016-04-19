@@ -91,16 +91,4 @@ if (!influxResult.Success)
 
 ## Status
 
-This project is in the early stages of development. It's targeting .NET 4.5.1 and the modern .NET platform using Visual Studio 2015 and the 'DNX' tooling.
-
-Roadmap for anyone keen to help out - contributions are welcome :-)
-
- - [x] Fix the build, once the latest (Beta 7) tooling refresh gets to AppVeyor
- - [ ] Tests, tests and more tests
- - [ ] Complete support for the parameters accepted to Influx's `/write` endpoint
- - [ ] Sampling support for counter metrics (i.e. aggregate values within a sampling interval)
- - [x] Split the metrics collection facilities out into a separate package that uses the base Line Protocol package
- - [ ] Smarter batching
- - [ ] Better `Metrics.Close()`/`MetricsCollector.Dispose()`
- - [ ] Generally give some attention to performance
-
+This project is still undergoing some change while in development, but the core functionality is stabilizing. See issues tagged `enhancement` for roadmap items. It's currently targeting .NET 4.5.1 and .NET Core using Visual Studio 2015.
