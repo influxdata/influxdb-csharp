@@ -1,4 +1,4 @@
-# InfluxDB.LineProtocol [![Build status](https://ci.appveyor.com/api/projects/status/0tqovixkf1e1pqu3/branch/master?svg=true)](https://ci.appveyor.com/project/NicholasBlumhardt/influxdb-lineprotocol/branch/master) [![NuGet Version](http://img.shields.io/nuget/v/InfluxDB.LineProtocol.svg?style=flat)](https://www.nuget.org/packages/InfluxDB.LineProtocol/)
+# InfluxDB .NET Collector [![Build status](https://ci.appveyor.com/api/projects/status/0tqovixkf1e1pqu3/branch/master?svg=true)](https://ci.appveyor.com/project/NicholasBlumhardt/influxdb-lineprotocol/branch/master) [![NuGet Version](http://img.shields.io/nuget/v/InfluxDB.LineProtocol.svg?style=flat)](https://www.nuget.org/packages/InfluxDB.LineProtocol/)
 
 This is a C# implementation of the [InfluxDB](http://influxdb.org) ingestion ['Line Protocol'](https://influxdb.com/docs/v0.9/write_protocols/line.html).
 
