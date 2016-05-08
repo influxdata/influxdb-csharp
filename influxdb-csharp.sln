@@ -1,12 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{72DC28B9-37B5-425C-8532-5CA91D253A70}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "global", "global", "{35451F76-443F-442E-BE7E-23020DA3F0C5}"
 	ProjectSection(SolutionItems) = preProject
+		appveyor.yml = appveyor.yml
 		global.json = global.json
 		README.md = README.md
 	EndProjectSection
@@ -22,6 +23,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sample", "sample", "{CD65EE64-FDA8-4ED9-A7F2-81BDD9F64C64}"
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "InfluxDB.Collector", "src\InfluxDB.Collector\InfluxDB.Collector.xproj", "{F690F3E3-D9F0-441A-9E70-4F70998BDD1B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "asset", "asset", "{1B61D83B-C102-4079-981A-8FAF695D62CF}"
+	ProjectSection(SolutionItems) = preProject
+		asset\influxdata.jpg = asset\influxdata.jpg
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
