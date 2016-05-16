@@ -1,10 +1,11 @@
 ﻿{
   "version": "1.0.0-beta-*",
   "description": "A .NET library for efficiently sending time series to InfluxDB",
-  "authors": [ "nblumhardt" ],
+  "authors": [ "influxdb-csharp Contributors" ],
   "tags": [ "influxdb" ],
-  "projectUrl": "https://github.com/nblumhardt/influxdb-lineprotocol",
+  "projectUrl": "https://github.com/influxdata/influxdb-csharp",
   "licenseUrl": "http://www.apache.org/licenses/LICENSE-2.0",
+  "iconUrl": "https://raw.githubusercontent.com/influxdata/influxdb-csharp/master/asset/infludata.jpg",
 
   "frameworks": {
     "net45": {

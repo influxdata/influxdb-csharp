@@ -1,12 +1,13 @@
 ﻿{
   "version": "1.0.0-beta-*",
   "description": "A minimal metrics collection API for InfluxDB",
-  "authors": [ "nblumhardt" ],
+  "authors": [ "influxdb-csharp Contributors" ],
   "tags": [ "influxdb" ],
-  "projectUrl": "https://github.com/nblumhardt/influxdb-lineprotocol",
+  "projectUrl": "https://github.com/influxdata/influxdb-csharp",
   "licenseUrl": "http://www.apache.org/licenses/LICENSE-2.0",
+  "iconUrl": "https://raw.githubusercontent.com/influxdata/influxdb-csharp/master/asset/infludata.jpg",
   "dependencies": {
-    "InfluxDB.LineProtocol": {"target": "project"}
+    "InfluxDB.LineProtocol": { "target": "project" }
   },
   "frameworks": {
     "net45": {
