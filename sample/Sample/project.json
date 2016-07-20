@@ -1,11 +1,4 @@
 ﻿{
-  "version": "1.0.0-*",
-  "description": "Sample Console Application",
-  "authors": [ "nblumhardt" ],
-  "tags": [ "" ],
-  "projectUrl": "",
-  "licenseUrl": "",
-
   "dependencies": {
     "InfluxDB.LineProtocol": { "target": "project" },
     "InfluxDB.Collector": { "target": "project" }
@@ -16,17 +9,17 @@
   },
 
   "frameworks": {
-    "dnx451": {
+    "net4.5.2": {
     },
-    "dnxcore50": {
+    "netcoreapp1.0": {
       "dependencies": {
-        "System.Collections": "4.0.10-beta-23019",
-        "System.Console": "4.0.0-beta-23019",
-        "System.Linq": "4.0.0-beta-23019",
-        "System.Threading": "4.0.10-beta-23019",
-        "Microsoft.CSharp": "4.0.0-beta-23019",
-        "System.Diagnostics.Process": "4.0.0-beta-23109",
-        "System.Threading.Tasks": "4.0.10-beta-23109"
+        "System.Collections": "4.0.11",
+        "System.Console": "4.0.0",
+        "System.Linq": "4.1.0",
+        "System.Threading": "4.0.11",
+        "Microsoft.CSharp": "4.0.1",
+        "System.Diagnostics.Process": "4.1.0",
+        "System.Threading.Tasks": "4.0.11"
       }
     }
   }
