@@ -33,7 +33,7 @@ namespace InfluxDB.LineProtocol.Client
             var payloadText = new StringWriter();
             payload.Format(payloadText);
             var content = new StringContent(payloadText.ToString(), Encoding.UTF8);
-            var response = await _httpClient.PostAsync(endpoint, content, cancellationToken);
+            var response = await _httpClient.PostAsync(endpoint, content, cancellationToken).ConfigureAwait(false);
             if (response.IsSuccessStatusCode)
                 return new LineProtocolWriteResult(true, null);
 
