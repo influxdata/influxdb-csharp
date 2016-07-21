@@ -39,7 +39,7 @@ namespace InfluxDB.Collector.Platform
             {
                 if (!_cancel.Token.IsCancellationRequested)
                 {
-                    await Task.Delay(interval, _cancel.Token);
+                    await Task.Delay(interval, _cancel.Token).ConfigureAwait(false);
                 }
             }
             catch (TaskCanceledException) when (_cancel.IsCancellationRequested)
@@ -54,7 +54,7 @@ namespace InfluxDB.Collector.Platform
 
             if (!_cancel.Token.IsCancellationRequested)
             {
-                await Task.Run(() => _onTick(_cancel.Token));
+                await Task.Run(() => _onTick(_cancel.Token)).ConfigureAwait(false);
             }
         }
 
