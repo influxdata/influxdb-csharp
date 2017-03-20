@@ -83,7 +83,7 @@ payload.Add(cpuTime);
 Write the points to InfluxDB, specifying the server's base URL, database name, and an optional username and password:
 
 ```csharp
-var client = new LineProtocolClient("http://my-server:8086", "data");
+var client = new LineProtocolClient(new Uri("http://my-server:8086"), "data");
 var influxResult = await client.WriteAsync(payload);
 if (!influxResult.Success)
     Console.Error.WriteLine(influxResult.ErrorMessage);
