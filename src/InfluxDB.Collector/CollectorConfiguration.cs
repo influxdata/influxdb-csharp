@@ -41,11 +41,8 @@ namespace InfluxDB.Collector
 
             return new PipelinedMetricsCollector(emitter, _tag.CreateEnricher(), () =>
             {
-                if (disposeBatcher != null)
-                    disposeBatcher();
-
-                if (disposeEmitter != null)
-                    disposeEmitter();
+                disposeBatcher?.Invoke();
+                disposeEmitter?.Invoke();
             });
         }
     }

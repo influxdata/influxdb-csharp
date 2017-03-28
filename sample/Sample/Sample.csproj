@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net452;netcoreapp1.0</TargetFrameworks>
+    <AssemblyName>Sample</AssemblyName>
+    <PackageId>Sample</PackageId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\InfluxDB.LineProtocol\InfluxDB.LineProtocol.csproj" />
+    <ProjectReference Include="..\..\src\InfluxDB.Collector\InfluxDB.Collector.csproj" />
+  </ItemGroup>
+</Project>

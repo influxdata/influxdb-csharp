@@ -1,5 +1,4 @@
-﻿using InfluxDB.Collector.Configuration;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using InfluxDB.Collector.Pipeline;
 
