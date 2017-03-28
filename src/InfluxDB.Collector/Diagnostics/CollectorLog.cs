@@ -9,9 +9,7 @@ namespace InfluxDB.Collector.Diagnostics
 
         public static void WriteLine(string format, params object[] args)
         {
-            var writer = Out;
-            if (writer != null)
-                writer.WriteLine(format, args);
+            Out?.WriteLine(format, args);
         }
     }
 }
