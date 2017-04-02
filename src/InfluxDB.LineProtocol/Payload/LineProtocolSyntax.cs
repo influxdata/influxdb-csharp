@@ -71,7 +71,7 @@ namespace InfluxDB.LineProtocol.Payload
         public static string FormatTimestamp(DateTime utcTimestamp)
         {
             var t = utcTimestamp - Origin;
-            return ((long)(t.TotalMilliseconds * 1000000L)).ToString(CultureInfo.InvariantCulture);
+            return (t.Ticks * 100L).ToString(CultureInfo.InvariantCulture);
         }
     }
 }
