@@ -31,5 +31,28 @@ namespace InfluxDB.LineProtocol.Tests
 
             Assert.Equal(expected, sw.ToString());
         }
+
+        [Fact]
+        public void WriteNanosecondTimestamps()
+        {
+            const string expected = "a,t=1 f=1i 1490951520002000000";
+
+            var point = new LineProtocolPoint(
+                "a",
+                new Dictionary<string, object>
+                {
+                    { "f", 1 }
+                },
+                new Dictionary<string, string>
+                {
+                    { "t", "1" }
+                },
+                new DateTime(636265483200020000L, DateTimeKind.Utc));
+
+            var sw = new StringWriter();
+            point.Format(sw);
+
+            Assert.Equal(expected, sw.ToString());
+        }
     }
 }
