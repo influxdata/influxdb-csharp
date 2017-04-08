@@ -43,7 +43,7 @@ namespace InfluxDB.Collector
             }
             catch (Exception ex)
             {
-                CollectorLog.WriteLine("Failed to write point: {0}", ex);
+                CollectorLog.ReportError("Failed to write point", ex);
             }
         }
 
