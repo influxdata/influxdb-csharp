@@ -1,12 +1,13 @@
 ﻿using System;
-using System.Collections.Concurrent;
+using System.Collections.Generic;
 using InfluxDB.Collector.Util;
 
 namespace InfluxDB.Collector.Diagnostics
 {
     public static class CollectorLog
     {
-        private static readonly ConcurrentDictionary<Action<string, Exception>, object> ErrorHandlers = new ConcurrentDictionary<Action<string, Exception>, object>();
+        private static readonly HashSet<Action<string, Exception>> ErrorHandlers = new HashSet<Action<string, Exception>>();
+        private static readonly object SyncRoot = new object();
 
         /// <summary>
         /// Registers an error handler. Errors reported may not neccessarily always correspond with an exception. That is to say, when the callback is invoked, the exception may be null.
@@ -17,21 +18,37 @@ namespace InfluxDB.Collector.Diagnostics
         /// <returns>An IDispoable which when explicitly disposed, will unnregister the handler</returns>
         public static IDisposable RegisterErrorHandler(Action<string, Exception> errorHandler)
         {
-            ErrorHandlers.TryAdd(errorHandler, errorHandler);
-            return new DisposableAction(() => ErrorHandlers.TryRemove(errorHandler, out object junk));
+            lock (SyncRoot)
+            {
+                ErrorHandlers.Add(errorHandler);
+            }
+
+            return new DisposableAction(() => 
+            {
+                lock (SyncRoot) 
+                {
+                    ErrorHandlers.Remove(errorHandler);
+                }
+            });
         }
 
         internal static void ReportError(string message, Exception exception)
         {
-            foreach (var errorHandler in ErrorHandlers)
+            lock (SyncRoot)
             {
-                errorHandler.Key(message, exception);
+                foreach (var errorHandler in ErrorHandlers) 
+                {
+                    errorHandler(message, exception);
+                }
             }
         }
 
         internal static void ClearHandlers()
         {
-            ErrorHandlers.Clear();
+            lock (SyncRoot)
+            {
+                ErrorHandlers.Clear();
+            }
         }
     }
 }
