@@ -18,6 +18,8 @@ namespace InfluxDB.Collector.Diagnostics
         /// <returns>An IDispoable which when explicitly disposed, will unnregister the handler</returns>
         public static IDisposable RegisterErrorHandler(Action<string, Exception> errorHandler)
         {
+            if (errorHandler == null) throw new ArgumentNullException(nameof(errorHandler));
+
             lock (SyncRoot)
             {
                 ErrorHandlers.Add(errorHandler);

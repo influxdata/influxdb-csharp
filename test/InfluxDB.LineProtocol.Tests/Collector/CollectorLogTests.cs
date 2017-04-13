@@ -86,6 +86,12 @@ namespace InfluxDB.LineProtocol.Tests.Collector
             Assert.True(threw, "Excpected an exception thrown by the error handler to propagate to the caller");
         }
 
+        [Fact]
+        public void DisallowNullErrorHandlers()
+        {
+            Assert.Throws<ArgumentNullException>(() => CollectorLog.RegisterErrorHandler(null));
+        }
+
         public void Dispose()
         {
             CollectorLog.ClearHandlers();
