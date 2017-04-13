@@ -63,7 +63,7 @@ namespace InfluxDB.Collector.Pipeline.Batch
             }
             catch (Exception ex)
             {
-                CollectorLog.WriteLine("Failed to emit metrics batch: {0}", ex);
+                CollectorLog.ReportError("Failed to emit metrics batch", ex);
             }
             finally
             {

@@ -31,7 +31,7 @@ namespace InfluxDB.Collector.Pipeline.Emit
 
             var influxResult = _client.WriteAsync(payload).Result;
             if (!influxResult.Success)
-                CollectorLog.WriteLine(influxResult.ErrorMessage);
+                CollectorLog.ReportError(influxResult.ErrorMessage, null);
         }
     }
 }
