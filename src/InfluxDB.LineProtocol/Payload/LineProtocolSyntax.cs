@@ -6,8 +6,6 @@ namespace InfluxDB.LineProtocol.Payload
 {
     class LineProtocolSyntax
     {
-        static readonly DateTime Origin = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-
         static readonly Dictionary<Type, Func<object, string>> Formatters = new Dictionary<Type, Func<object, string>>
         {
             { typeof(sbyte), FormatInteger },
@@ -70,8 +68,7 @@ namespace InfluxDB.LineProtocol.Payload
 
         public static string FormatTimestamp(DateTime utcTimestamp)
         {
-            var t = utcTimestamp - Origin;
-            return (t.Ticks * 100L).ToString(CultureInfo.InvariantCulture);
+            return ((utcTimestamp.Ticks - 621355968000000000L) * 100L).ToString(CultureInfo.InvariantCulture);
         }
     }
 }
