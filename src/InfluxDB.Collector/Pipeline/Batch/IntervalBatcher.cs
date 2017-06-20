@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using InfluxDB.Collector.Diagnostics;
+using InfluxDB.Collector.Platform;
 
 namespace InfluxDB.Collector.Pipeline.Batch
 {
