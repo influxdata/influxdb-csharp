@@ -1,81 +1,122 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using InfluxDB.Collector.Diagnostics;
 
-namespace InfluxDB.Collector.Platform
+class PortableTimer : IDisposable
 {
-    class PortableTimer : IDisposable
+    readonly object _stateLock = new object();
+
+    readonly Func<CancellationToken, Task> _onTick;
+    readonly CancellationTokenSource _cancel = new CancellationTokenSource();
+
+#if THREADING_TIMER
+        readonly Timer _timer;
+#endif
+
+    bool _running;
+    bool _disposed;
+
+    public PortableTimer(Func<CancellationToken, Task> onTick)
     {
-        readonly object _stateLock = new object();
-        PortableTimerState _state = PortableTimerState.NotWaiting;
+        if (onTick == null) throw new ArgumentNullException(nameof(onTick));
 
-        readonly Action<CancellationToken> _onTick;
-        readonly CancellationTokenSource _cancel = new CancellationTokenSource();
+        _onTick = onTick;
 
-        public PortableTimer(Action<CancellationToken> onTick)
+#if THREADING_TIMER
+            _timer = new Timer(_ => OnTick(), null, Timeout.Infinite, Timeout.Infinite);
+#endif
+    }
+
+    public void Start(TimeSpan interval)
+    {
+        if (interval < TimeSpan.Zero) throw new ArgumentOutOfRangeException(nameof(interval));
+
+        lock (_stateLock)
         {
-            if (onTick == null) throw new ArgumentNullException(nameof(onTick));
-            _onTick = onTick;
+            if (_disposed)
+                throw new ObjectDisposedException(nameof(PortableTimer));
+
+#if THREADING_TIMER
+                _timer.Change(interval, Timeout.InfiniteTimeSpan);
+#else
+            Task.Delay(interval, _cancel.Token)
+                .ContinueWith(
+                    _ => OnTick(),
+                    CancellationToken.None,
+                    TaskContinuationOptions.DenyChildAttach,
+                    TaskScheduler.Default);
+#endif
         }
+    }
 
-        public async void Start(TimeSpan interval)
+    async void OnTick()
+    {
+        try
         {
-            if (interval < TimeSpan.Zero) throw new ArgumentOutOfRangeException(nameof(interval));
-
             lock (_stateLock)
             {
-                if (_state == PortableTimerState.Disposed)
-                    throw new ObjectDisposedException("PortableTimer");
-
-                if (_state == PortableTimerState.Waiting)
-                    throw new InvalidOperationException("The timer already set");
-
-                if (_cancel.IsCancellationRequested) return;
-
-                _state = PortableTimerState.Waiting;
-            }
-
-            try
-            {
-                if (!_cancel.Token.IsCancellationRequested)
+                if (_disposed)
                 {
-                    await Task.Delay(interval, _cancel.Token).ConfigureAwait(false);
+                    return;
                 }
-            }
-            catch (TaskCanceledException) when (_cancel.IsCancellationRequested)
-            {
-                // currently disposing
-            }
-            finally
-            {
-                lock (_stateLock)
-                    _state = PortableTimerState.NotWaiting;
+
+                // There's a little bit of raciness here, but it's needed to support the
+                // current API, which allows the tick handler to reenter and set the next interval.
+
+                if (_running)
+                {
+                    Monitor.Wait(_stateLock);
+
+                    if (_disposed)
+                    {
+                        return;
+                    }
+                }
+
+                _running = true;
             }
 
             if (!_cancel.Token.IsCancellationRequested)
             {
-                await Task.Run(() => _onTick(_cancel.Token)).ConfigureAwait(false);
+                await _onTick(_cancel.Token);
             }
         }
-
-        public void Dispose()
+        catch (OperationCanceledException tcx)
         {
-            _cancel.Cancel();
-
-            while (true)
+            CollectorLog.ReportError("The timer was canceled during invocation", tcx);
+        }
+        finally
+        {
+            lock (_stateLock)
             {
-                // Thread.Sleep() would be handy here...
-
-                lock (_stateLock)
-                {
-                    if (_state == PortableTimerState.Disposed ||
-                        _state == PortableTimerState.NotWaiting)
-                    {
-                        _state = PortableTimerState.Disposed;
-                        return;
-                    }
-                }
+                _running = false;
+                Monitor.PulseAll(_stateLock);
             }
+        }
+    }
+
+    public void Dispose()
+    {
+        _cancel.Cancel();
+
+        lock (_stateLock)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            while (_running)
+            {
+                Monitor.Wait(_stateLock);
+            }
+
+#if THREADING_TIMER
+                _timer.Dispose();
+#endif
+
+            _disposed = true;
         }
     }
 }
