@@ -2,7 +2,6 @@
 using InfluxDB.LineProtocol.Payload;
 using System.Collections.Generic;
 using System;
-using System.IO;
 using System.Linq;
 
 namespace InfluxDB.LineProtocol.Tests
@@ -27,7 +26,7 @@ namespace InfluxDB.LineProtocol.Tests
                 },
                 new DateTime(2015, 9, 9, 0, 0, 0, DateTimeKind.Utc));
 
-            var sw = new StringWriter();
+            var sw = new LineProtocolWriter();
             point.Format(sw);
 
             Assert.Equal(expected, sw.ToString());
@@ -50,7 +49,7 @@ namespace InfluxDB.LineProtocol.Tests
                 },
                 new DateTime(636265483200020000L, DateTimeKind.Utc));
 
-            var sw = new StringWriter();
+            var sw = new LineProtocolWriter();
             point.Format(sw);
 
             Assert.Equal(expected, sw.ToString());
@@ -69,7 +68,7 @@ namespace InfluxDB.LineProtocol.Tests
                 }
             );
 
-            var sw = new StringWriter();
+            var sw = new LineProtocolWriter();
             point.Format(sw);
 
             Assert.Equal(expected, sw.ToString());

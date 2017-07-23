@@ -1,6 +1,6 @@
 ﻿using InfluxDB.LineProtocol.Payload;
 using System;
-using System.IO;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
@@ -24,15 +24,30 @@ namespace InfluxDB.LineProtocol.Client
             _password = password;
         }
 
-        public async Task<LineProtocolWriteResult> WriteAsync(LineProtocolPayload payload, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<LineProtocolWriteResult> WriteAsync(LineProtocolPayload payload, CancellationToken cancellationToken = default(CancellationToken))
         {
+            return WriteAsync(new[] { payload }, cancellationToken);
+        }
+
+        public async Task<LineProtocolWriteResult> WriteAsync<TPayload>(IEnumerable<TPayload> payload, CancellationToken cancellationToken = default(CancellationToken)) where TPayload : ILineProtocolPayload
+        {
+            if (payload == null)
+            {
+                throw new ArgumentNullException(nameof(payload));
+            }
+
             var endpoint = $"write?db={Uri.EscapeDataString(_database)}";
             if (!string.IsNullOrEmpty(_username))
                 endpoint += $"&u={Uri.EscapeDataString(_username)}&p={Uri.EscapeDataString(_password)}";
 
-            var payloadText = new StringWriter();
-            payload.Format(payloadText);
-            var content = new StringContent(payloadText.ToString(), Encoding.UTF8);
+            LineProtocolWriter writer = new LineProtocolWriter();
+
+            foreach (var point in payload)
+            {
+                point.Format(writer);
+            }
+
+            var content = new StringContent(writer.ToString(), Encoding.UTF8);
             var response = await _httpClient.PostAsync(endpoint, content, cancellationToken).ConfigureAwait(false);
             if (response.IsSuccessStatusCode)
                 return new LineProtocolWriteResult(true, null);
