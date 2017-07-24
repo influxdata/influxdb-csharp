@@ -46,7 +46,7 @@ namespace InfluxDB.LineProtocol
                     throw new InvalidOperationException();
             }
 
-            textWriter.Write(LineProtocolSyntax.EscapeName(name));
+            textWriter.Write(EscapeName(name));
 
             Position = WriterPosition.MeasurementWriten;
 
@@ -65,9 +65,9 @@ namespace InfluxDB.LineProtocol
                     throw new InvalidOperationException();
             }
 
-            textWriter.Write(LineProtocolSyntax.EscapeName(name));
+            textWriter.Write(EscapeName(name));
             textWriter.Write('=');
-            textWriter.Write(LineProtocolSyntax.EscapeName(value));
+            textWriter.Write(EscapeName(value));
 
             return this;
         }
@@ -192,7 +192,16 @@ namespace InfluxDB.LineProtocol
                     throw new InvalidOperationException();
             }
 
-            textWriter.Write(LineProtocolSyntax.EscapeName(name));
+            textWriter.Write(EscapeName(name));
+        }
+
+        public static string EscapeName(string nameOrKey)
+        {
+            if (nameOrKey == null) throw new ArgumentNullException(nameof(nameOrKey));
+            return nameOrKey
+                .Replace("=", "\\=")
+                .Replace(" ", "\\ ")
+                .Replace(",", "\\,");
         }
 
         public enum WriterPosition
