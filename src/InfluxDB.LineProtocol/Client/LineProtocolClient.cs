@@ -24,28 +24,59 @@ namespace InfluxDB.LineProtocol.Client
             _password = password;
         }
 
-        public Task<LineProtocolWriteResult> WriteAsync(LineProtocolPayload payload, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<LineProtocolWriteResult> WriteAsync(ILineProtocolPayload payload, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return WriteAsync(new[] { payload }, cancellationToken);
+            var writer = CreateWriter();
+
+            payload.Format(writer);
+
+            return WriteAsync(writer, cancellationToken);
         }
 
-        public async Task<LineProtocolWriteResult> WriteAsync<TPayload>(IEnumerable<TPayload> payload, CancellationToken cancellationToken = default(CancellationToken)) where TPayload : ILineProtocolPayload
+        public Task<LineProtocolWriteResult> WriteAsync(IEnumerable<ILineProtocolPayload> payload, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (payload == null)
             {
                 throw new ArgumentNullException(nameof(payload));
             }
 
-            var endpoint = $"write?db={Uri.EscapeDataString(_database)}";
-            if (!string.IsNullOrEmpty(_username))
-                endpoint += $"&u={Uri.EscapeDataString(_username)}&p={Uri.EscapeDataString(_password)}";
-
-            LineProtocolWriter writer = new LineProtocolWriter();
+            var writer = CreateWriter();
 
             foreach (var point in payload)
             {
                 point.Format(writer);
             }
+
+            return WriteAsync(writer, cancellationToken);
+        }
+
+        public Task<LineProtocolWriteResult> WriteAsync<TPayload>(IEnumerable<TPayload> payload, CancellationToken cancellationToken = default(CancellationToken)) where TPayload : struct, ILineProtocolPayload
+        {
+            if (payload == null)
+            {
+                throw new ArgumentNullException(nameof(payload));
+            }
+
+            var writer = CreateWriter();
+
+            foreach (var point in payload)
+            {
+                point.Format(writer);
+            }
+
+            return WriteAsync(writer, cancellationToken);
+        }
+
+        private LineProtocolWriter CreateWriter()
+        {
+            return new LineProtocolWriter();
+        }
+
+        private async Task<LineProtocolWriteResult> WriteAsync(LineProtocolWriter writer, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var endpoint = $"write?db={Uri.EscapeDataString(_database)}";
+            if (!string.IsNullOrEmpty(_username))
+                endpoint += $"&u={Uri.EscapeDataString(_username)}&p={Uri.EscapeDataString(_password)}";
 
             var content = new StringContent(writer.ToString(), Encoding.UTF8);
             var response = await _httpClient.PostAsync(endpoint, content, cancellationToken).ConfigureAwait(false);
