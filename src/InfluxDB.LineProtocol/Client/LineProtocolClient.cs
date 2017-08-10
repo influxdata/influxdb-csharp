@@ -30,7 +30,7 @@ namespace InfluxDB.LineProtocol.Client
 
             payload.Format(writer);
 
-            return WriteAsync(writer, cancellationToken);
+            return SendAsync(writer, cancellationToken);
         }
 
         public Task<LineProtocolWriteResult> WriteAsync(IEnumerable<ILineProtocolPayload> payload, CancellationToken cancellationToken = default(CancellationToken))
@@ -47,7 +47,7 @@ namespace InfluxDB.LineProtocol.Client
                 point.Format(writer);
             }
 
-            return WriteAsync(writer, cancellationToken);
+            return SendAsync(writer, cancellationToken);
         }
 
         public Task<LineProtocolWriteResult> WriteAsync<TPayload>(IEnumerable<TPayload> payload, CancellationToken cancellationToken = default(CancellationToken)) where TPayload : struct, ILineProtocolPayload
@@ -64,7 +64,7 @@ namespace InfluxDB.LineProtocol.Client
                 point.Format(writer);
             }
 
-            return WriteAsync(writer, cancellationToken);
+            return SendAsync(writer, cancellationToken);
         }
 
         private LineProtocolWriter CreateWriter()
@@ -72,7 +72,7 @@ namespace InfluxDB.LineProtocol.Client
             return new LineProtocolWriter();
         }
 
-        private async Task<LineProtocolWriteResult> WriteAsync(LineProtocolWriter writer, CancellationToken cancellationToken = default(CancellationToken))
+        private async Task<LineProtocolWriteResult> SendAsync(LineProtocolWriter writer, CancellationToken cancellationToken = default(CancellationToken))
         {
             var endpoint = $"write?db={Uri.EscapeDataString(_database)}";
             if (!string.IsNullOrEmpty(_username))
