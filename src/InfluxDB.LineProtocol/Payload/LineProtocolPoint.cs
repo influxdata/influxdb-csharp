@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace InfluxDB.LineProtocol.Payload
 {
-    public class LineProtocolPoint : ILineProtocolPayload
+    public class LineProtocolPoint
     {
         public string Measurement { get; }
         public IReadOnlyDictionary<string, object> Fields { get; }

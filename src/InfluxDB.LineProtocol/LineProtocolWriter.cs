@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
-using InfluxDB.LineProtocol.Payload;
 
 namespace InfluxDB.LineProtocol
 {

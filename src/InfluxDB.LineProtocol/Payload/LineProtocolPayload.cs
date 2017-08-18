@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace InfluxDB.LineProtocol.Payload
 {
-    public class LineProtocolPayload : ILineProtocolPayload
+    public class LineProtocolPayload
     {
         readonly List<LineProtocolPoint> _points = new List<LineProtocolPoint>();
 

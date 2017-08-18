@@ -1,6 +1,5 @@
 ﻿using InfluxDB.LineProtocol.Payload;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
@@ -24,7 +23,7 @@ namespace InfluxDB.LineProtocol.Client
             _password = password;
         }
 
-        public Task<LineProtocolWriteResult> WriteAsync(ILineProtocolPayload payload, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<LineProtocolWriteResult> WriteAsync(LineProtocolPayload payload, CancellationToken cancellationToken = default(CancellationToken))
         {
             var writer = CreateWriter();
 
@@ -33,39 +32,6 @@ namespace InfluxDB.LineProtocol.Client
             return SendAsync(writer, cancellationToken);
         }
 
-        public Task<LineProtocolWriteResult> WriteAsync(IEnumerable<ILineProtocolPayload> payload, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            if (payload == null)
-            {
-                throw new ArgumentNullException(nameof(payload));
-            }
-
-            var writer = CreateWriter();
-
-            foreach (var point in payload)
-            {
-                point.Format(writer);
-            }
-
-            return SendAsync(writer, cancellationToken);
-        }
-
-        public Task<LineProtocolWriteResult> WriteAsync<TPayload>(IEnumerable<TPayload> payload, CancellationToken cancellationToken = default(CancellationToken)) where TPayload : struct, ILineProtocolPayload
-        {
-            if (payload == null)
-            {
-                throw new ArgumentNullException(nameof(payload));
-            }
-
-            var writer = CreateWriter();
-
-            foreach (var point in payload)
-            {
-                point.Format(writer);
-            }
-
-            return SendAsync(writer, cancellationToken);
-        }
 
         private LineProtocolWriter CreateWriter()
         {
