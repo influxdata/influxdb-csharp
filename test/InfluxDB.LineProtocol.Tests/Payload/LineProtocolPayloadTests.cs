@@ -2,7 +2,7 @@
 using InfluxDB.LineProtocol.Payload;
 using System.Collections.Generic;
 using System;
-using System.Linq;
+using System.IO;
 
 namespace InfluxDB.LineProtocol.Tests
 {
@@ -26,7 +26,7 @@ namespace InfluxDB.LineProtocol.Tests
                 },
                 new DateTime(2015, 9, 9, 0, 0, 0, DateTimeKind.Utc));
 
-            var sw = new LineProtocolWriter();
+            var sw = new StringWriter();
             point.Format(sw);
 
             Assert.Equal(expected, sw.ToString());
@@ -49,52 +49,10 @@ namespace InfluxDB.LineProtocol.Tests
                 },
                 new DateTime(636265483200020000L, DateTimeKind.Utc));
 
-            var sw = new LineProtocolWriter();
+            var sw = new StringWriter();
             point.Format(sw);
 
             Assert.Equal(expected, sw.ToString());
-        }
-
-        [Theory, MemberData(nameof(FieldValues))]
-        public void Write_values(object value, string fieldValue)
-        {
-            string expected = $"mymeas value={fieldValue}";
-
-            var point = new LineProtocolPoint(
-                "mymeas",
-                new Dictionary<string, object>
-                {
-                    { "value", value}
-                }
-            );
-
-            var sw = new LineProtocolWriter();
-            point.Format(sw);
-
-            Assert.Equal(expected, sw.ToString());
-        }
-
-        public static IEnumerable<object[]> FieldValues()
-        {
-            var values = new(object value, object expected)[]
-            {
-                (sbyte.MaxValue, "127i"),
-                (byte.MaxValue, "255i"),
-                (short.MaxValue, "32767i"),
-                (ushort.MaxValue, "65535i"),
-                (int.MaxValue, "2147483647i"),
-                (uint.MaxValue, "4294967295i"),
-                (long.MaxValue, "9223372036854775807i"),
-                ((ulong) long.MaxValue, "9223372036854775807i"),
-                (float.MaxValue, "3.402823E+38"),
-                (double.MaxValue, "1.79769313486232E+308"),
-                (decimal.MaxValue, "79228162514264337593543950335"),
-                (true, "t"),
-                (false, "f"),
-                (TimeSpan.FromMilliseconds(34), 34)
-            };
-
-            return values.Select(x => new[] { x.value, x.expected });
         }
     }
 }

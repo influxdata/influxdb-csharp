@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace InfluxDB.LineProtocol.Payload
@@ -10,7 +11,7 @@ namespace InfluxDB.LineProtocol.Payload
         public IReadOnlyDictionary<string, object> Fields { get; }
         public IReadOnlyDictionary<string, string> Tags { get; }
         public DateTime? UtcTimestamp { get; }
-
+        
         public LineProtocolPoint(
             string measurement,
             IReadOnlyDictionary<string, object> fields,
@@ -36,79 +37,40 @@ namespace InfluxDB.LineProtocol.Payload
             UtcTimestamp = utcTimestamp;
         }
 
-        public void Format(LineProtocolWriter writer)
+        public void Format(TextWriter textWriter)
         {
-            if (writer == null) throw new ArgumentNullException(nameof(writer));
+            if (textWriter == null) throw new ArgumentNullException(nameof(textWriter));
 
-            writer.Measurement(Measurement);
+            textWriter.Write(LineProtocolSyntax.EscapeName(Measurement));
 
             if (Tags != null)
             {
                 foreach (var t in Tags.OrderBy(t => t.Key))
                 {
-                    if (string.IsNullOrEmpty(t.Value))
+                    if (t.Value == null || t.Value == "")
                         continue;
 
-                    writer.Tag(t.Key, t.Value);
+                    textWriter.Write(',');
+                    textWriter.Write(LineProtocolSyntax.EscapeName(t.Key));
+                    textWriter.Write('=');
+                    textWriter.Write(LineProtocolSyntax.EscapeName(t.Value));
                 }
             }
 
+            var fieldDelim = ' ';
             foreach (var f in Fields)
             {
-                switch (f.Value)
-                {
-                    case sbyte value:
-                        writer.Field(f.Key, value);
-                        break;
-                    case byte value:
-                        writer.Field(f.Key, value);
-                        break;
-                    case short value:
-                        writer.Field(f.Key, value);
-                        break;
-                    case ushort value:
-                        writer.Field(f.Key, value);
-                        break;
-                    case int value:
-                        writer.Field(f.Key, value);
-                        break;
-                    case uint value:
-                        writer.Field(f.Key, value);
-                        break;
-                    case long value:
-                        writer.Field(f.Key, value);
-                        break;
-                    case ulong value:
-                        if (value > long.MaxValue)
-                        {
-                            throw new InvalidOperationException("Influx cannot store a value larger than 9223372036854775807");
-                        }
-                        writer.Field(f.Key, (long)value);
-                        break;
-                    case float value:
-                        writer.Field(f.Key, value);
-                        break;
-                    case double value:
-                        writer.Field(f.Key, value);
-                        break;
-                    case decimal value:
-                        writer.Field(f.Key, value);
-                        break;
-                    case bool value:
-                        writer.Field(f.Key, value);
-                        break;
-                    case TimeSpan value:
-                        writer.Field(f.Key, value.TotalMilliseconds);
-                        break;
-                    default:
-                        writer.Field(f.Key, f.Value.ToString());
-                        break;
-                }
+                textWriter.Write(fieldDelim);
+                fieldDelim = ',';
+                textWriter.Write(LineProtocolSyntax.EscapeName(f.Key));
+                textWriter.Write('=');
+                textWriter.Write(LineProtocolSyntax.FormatValue(f.Value));
             }
 
             if (UtcTimestamp != null)
             {
-                writer.Timestamp(UtcTimestamp.Value);
+                textWriter.Write(' ');
+                textWriter.Write(LineProtocolSyntax.FormatTimestamp(UtcTimestamp.Value));
             }
         }
     }

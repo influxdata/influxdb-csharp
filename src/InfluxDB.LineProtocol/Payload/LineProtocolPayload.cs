@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace InfluxDB.LineProtocol.Payload
 {
@@ -13,13 +14,14 @@ namespace InfluxDB.LineProtocol.Payload
             _points.Add(point);
         }
 
-        public void Format(LineProtocolWriter writer)
+        public void Format(TextWriter textWriter)
         {
-            if (writer == null) throw new ArgumentNullException(nameof(writer));
+            if (textWriter == null) throw new ArgumentNullException(nameof(textWriter));
 
             foreach (var point in _points)
             {
-                point.Format(writer);
+                point.Format(textWriter);
+                textWriter.Write('\n');
             }
         }
     }

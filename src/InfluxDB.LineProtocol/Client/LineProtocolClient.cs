@@ -1,5 +1,6 @@
 ﻿using InfluxDB.LineProtocol.Payload;
 using System;
+using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
@@ -25,26 +26,31 @@ namespace InfluxDB.LineProtocol.Client
 
         public Task<LineProtocolWriteResult> WriteAsync(LineProtocolPayload payload, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var writer = CreateWriter();
+            var writer = new StringWriter();
 
             payload.Format(writer);
 
-            return SendAsync(writer, cancellationToken);
+            return SendAsync(writer.ToString(), cancellationToken);
         }
 
 
-        private LineProtocolWriter CreateWriter()
+        public LineProtocolWriter CreateWriter()
         {
             return new LineProtocolWriter();
         }
 
-        private async Task<LineProtocolWriteResult> SendAsync(LineProtocolWriter writer, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<LineProtocolWriteResult> SendAsync(LineProtocolWriter writer, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return SendAsync(writer.ToString(), cancellationToken);
+        }
+
+        private async Task<LineProtocolWriteResult> SendAsync(string payload, CancellationToken cancellationToken = default(CancellationToken))
         {
             var endpoint = $"write?db={Uri.EscapeDataString(_database)}";
             if (!string.IsNullOrEmpty(_username))
                 endpoint += $"&u={Uri.EscapeDataString(_username)}&p={Uri.EscapeDataString(_password)}";
 
-            var content = new StringContent(writer.ToString(), Encoding.UTF8);
+            var content = new StringContent(payload, Encoding.UTF8);
             var response = await _httpClient.PostAsync(endpoint, content, cancellationToken).ConfigureAwait(false);
             if (response.IsSuccessStatusCode)
                 return new LineProtocolWriteResult(true, null);
