@@ -10,15 +10,11 @@ namespace InfluxDB.LineProtocol
 
         private readonly TextWriter textWriter;
 
-        public WriterPosition Position { get; private set; } = WriterPosition.StartOfLine;
+        public WriterPosition Position { get; private set; } = WriterPosition.NothingWritten;
 
-        public LineProtocolWriter() : this(new StringWriter())
+        public LineProtocolWriter()
         {
-        }
-
-        internal LineProtocolWriter(TextWriter textWriter)
-        {
-            this.textWriter = textWriter ?? throw new ArgumentNullException(nameof(textWriter));
+            this.textWriter = new StringWriter();
         }
 
         public LineProtocolWriter Measurement(string name)
@@ -35,7 +31,7 @@ namespace InfluxDB.LineProtocol
 
             switch (Position)
             {
-                case WriterPosition.StartOfLine:
+                case WriterPosition.NothingWritten:
                     break;
                 case WriterPosition.FieldWritten:
                 case WriterPosition.TimestampWritten:
@@ -170,12 +166,7 @@ namespace InfluxDB.LineProtocol
 
         public override string ToString()
         {
-            if (textWriter is StringWriter stringWriter)
-            {
-                return stringWriter.GetStringBuilder().ToString();
-            }
-
-            return $"{GetType().Name} at postion {this.Position}";
+            return textWriter.ToString();
         }
 
         private void WriteFieldKey(string name)
@@ -198,7 +189,11 @@ namespace InfluxDB.LineProtocol
 
         public static string EscapeName(string nameOrKey)
         {
-            if (nameOrKey == null) throw new ArgumentNullException(nameof(nameOrKey));
+            if (nameOrKey == null)
+            {
+                throw new ArgumentNullException(nameof(nameOrKey));
+            }
+
             return nameOrKey
                 .Replace("=", "\\=")
                 .Replace(" ", "\\ ")
@@ -207,7 +202,7 @@ namespace InfluxDB.LineProtocol
 
         public enum WriterPosition
         {
-            StartOfLine,
+            NothingWritten,
             MeasurementWritten,
             TagWritten,
             FieldWritten,

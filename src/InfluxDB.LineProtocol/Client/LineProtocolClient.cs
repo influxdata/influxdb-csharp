@@ -39,11 +39,6 @@ namespace InfluxDB.LineProtocol.Client
             return SendAsync(writer.ToString(), cancellationToken);
         }
 
-        public LineProtocolWriter CreateWriter()
-        {
-            return new LineProtocolWriter();
-        }
-
         public Task<LineProtocolWriteResult> SendAsync(LineProtocolWriter writer, CancellationToken cancellationToken = default(CancellationToken))
         {
             return SendAsync(writer.ToString(), cancellationToken);
