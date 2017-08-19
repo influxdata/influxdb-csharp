@@ -153,6 +153,8 @@ namespace InfluxDB.LineProtocol
 
             textWriter.Write(value.ToString(CultureInfo.InvariantCulture));
 
+            Position = WriterPosition.TimestampWritten;
+
             return this;
         }
 
