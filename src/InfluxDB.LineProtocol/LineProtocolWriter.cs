@@ -37,8 +37,8 @@ namespace InfluxDB.LineProtocol
             {
                 case WriterPosition.StartOfLine:
                     break;
-                case WriterPosition.FieldWriten:
-                case WriterPosition.TimestampWriten:
+                case WriterPosition.FieldWritten:
+                case WriterPosition.TimestampWritten:
                     textWriter.Write("\n");
                     break;
                 default:
@@ -47,7 +47,7 @@ namespace InfluxDB.LineProtocol
 
             textWriter.Write(EscapeName(name));
 
-            Position = WriterPosition.MeasurementWriten;
+            Position = WriterPosition.MeasurementWritten;
 
             return this;
         }
@@ -56,8 +56,8 @@ namespace InfluxDB.LineProtocol
         {
             switch (Position)
             {
-                case WriterPosition.MeasurementWriten:
-                case WriterPosition.TagWriten:
+                case WriterPosition.MeasurementWritten:
+                case WriterPosition.TagWritten:
                     textWriter.Write(",");
                     break;
                 default:
@@ -77,7 +77,7 @@ namespace InfluxDB.LineProtocol
             textWriter.Write('=');
             textWriter.Write(value.ToString(CultureInfo.InvariantCulture));
 
-            Position = WriterPosition.FieldWriten;
+            Position = WriterPosition.FieldWritten;
 
             return this;
         }
@@ -88,7 +88,7 @@ namespace InfluxDB.LineProtocol
             textWriter.Write('=');
             textWriter.Write(value.ToString(CultureInfo.InvariantCulture));
 
-            Position = WriterPosition.FieldWriten;
+            Position = WriterPosition.FieldWritten;
 
             return this;
         }
@@ -99,7 +99,7 @@ namespace InfluxDB.LineProtocol
             textWriter.Write('=');
             textWriter.Write(value.ToString(CultureInfo.InvariantCulture));
 
-            Position = WriterPosition.FieldWriten;
+            Position = WriterPosition.FieldWritten;
 
             return this;
         }
@@ -111,7 +111,7 @@ namespace InfluxDB.LineProtocol
             textWriter.Write(value.ToString(CultureInfo.InvariantCulture));
             textWriter.Write('i');
 
-            Position = WriterPosition.FieldWriten;
+            Position = WriterPosition.FieldWritten;
 
             return this;
         }
@@ -124,7 +124,7 @@ namespace InfluxDB.LineProtocol
             textWriter.Write(value.Replace("\"", "\\\""));
             textWriter.Write('"');
 
-            Position = WriterPosition.FieldWriten;
+            Position = WriterPosition.FieldWritten;
 
             return this;
         }
@@ -135,7 +135,7 @@ namespace InfluxDB.LineProtocol
             textWriter.Write('=');
             textWriter.Write(value ? 't' : 'f');
 
-            Position = WriterPosition.FieldWriten;
+            Position = WriterPosition.FieldWritten;
 
             return this;
         }
@@ -144,7 +144,7 @@ namespace InfluxDB.LineProtocol
         {
             switch (Position)
             {
-                case WriterPosition.FieldWriten:
+                case WriterPosition.FieldWritten:
                     textWriter.Write(" ");
                     break;
                 default:
@@ -180,11 +180,11 @@ namespace InfluxDB.LineProtocol
         {
             switch (Position)
             {
-                case WriterPosition.MeasurementWriten:
-                case WriterPosition.TagWriten:
+                case WriterPosition.MeasurementWritten:
+                case WriterPosition.TagWritten:
                     textWriter.Write(" ");
                     break;
-                case WriterPosition.FieldWriten:
+                case WriterPosition.FieldWritten:
                     textWriter.Write(",");
                     break;
                 default:
@@ -206,10 +206,10 @@ namespace InfluxDB.LineProtocol
         public enum WriterPosition
         {
             StartOfLine,
-            MeasurementWriten,
-            TagWriten,
-            FieldWriten,
-            TimestampWriten
+            MeasurementWritten,
+            TagWritten,
+            FieldWritten,
+            TimestampWritten
         }
     }
 }

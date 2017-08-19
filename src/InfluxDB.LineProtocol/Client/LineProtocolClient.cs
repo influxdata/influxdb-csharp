@@ -33,7 +33,6 @@ namespace InfluxDB.LineProtocol.Client
             return SendAsync(writer.ToString(), cancellationToken);
         }
 
-
         public LineProtocolWriter CreateWriter()
         {
             return new LineProtocolWriter();

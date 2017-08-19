@@ -65,7 +65,7 @@ namespace InfluxDB.LineProtocol.Tests
         }
 
         [Fact]
-        public void Multible_lines()
+        public void Multiple_lines()
         {
             var lines = new[]
             {
