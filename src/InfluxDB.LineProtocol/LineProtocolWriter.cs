@@ -38,7 +38,7 @@ namespace InfluxDB.LineProtocol
                     textWriter.Write("\n");
                     break;
                 default:
-                    throw InvalidPositionException("Cannot write new measument as no field written for current measument.");
+                    throw InvalidPositionException("Cannot write new measurement as no field written for current measurement.");
             }
 
             textWriter.Write(EscapeName(name));
@@ -57,9 +57,9 @@ namespace InfluxDB.LineProtocol
                     textWriter.Write(",");
                     break;
                 case LineProtocolWriterPosition.NothingWritten:
-                    throw InvalidPositionException("Cannot write tag as no measument name written.");
+                    throw InvalidPositionException("Cannot write tag as no measurement name written.");
                 default:
-                    throw InvalidPositionException("Cannot write tag as field(s) already written for current measument.");
+                    throw InvalidPositionException("Cannot write tag as field(s) already written for current measurement.");
             }
 
             textWriter.Write(EscapeName(name));
@@ -148,9 +148,9 @@ namespace InfluxDB.LineProtocol
                     textWriter.Write(" ");
                     break;
                 case LineProtocolWriterPosition.NothingWritten:
-                    throw InvalidPositionException("Cannot write timestamp as no measument name written.");
+                    throw InvalidPositionException("Cannot write timestamp as no measurement name written.");
                 default:
-                    throw InvalidPositionException("Cannot write timestamp as no field written for current measument.");
+                    throw InvalidPositionException("Cannot write timestamp as no field written for current measurement.");
             }
 
             textWriter.Write(value.ToString(CultureInfo.InvariantCulture));
@@ -185,7 +185,7 @@ namespace InfluxDB.LineProtocol
                     textWriter.Write(",");
                     break;
                 default:
-                    throw InvalidPositionException("Cannot write field as no measument name written.");
+                    throw InvalidPositionException("Cannot write field as no measurement name written.");
             }
 
             textWriter.Write(EscapeName(name));
