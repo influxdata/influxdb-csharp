@@ -38,7 +38,7 @@ namespace InfluxDB.LineProtocol
                     textWriter.Write("\n");
                     break;
                 default:
-                    throw InvalidPositionException("Cannot write new measurement as no field written for current measurement.");
+                    throw InvalidPositionException($"Cannot write new measurement \"{name}\" as no field written for current line.");
             }
 
             textWriter.Write(EscapeName(name));
@@ -57,9 +57,9 @@ namespace InfluxDB.LineProtocol
                     textWriter.Write(",");
                     break;
                 case LineProtocolWriterPosition.NothingWritten:
-                    throw InvalidPositionException("Cannot write tag as no measurement name written.");
+                    throw InvalidPositionException($"Cannot write tag \"{name}\" as no measurement name written.");
                 default:
-                    throw InvalidPositionException("Cannot write tag as field(s) already written for current measurement.");
+                    throw InvalidPositionException($"Cannot write tag \"{name}\" as field(s) already written for current line.");
             }
 
             textWriter.Write(EscapeName(name));
@@ -185,7 +185,7 @@ namespace InfluxDB.LineProtocol
                     textWriter.Write(",");
                     break;
                 default:
-                    throw InvalidPositionException("Cannot write field as no measurement name written.");
+                    throw InvalidPositionException($"Cannot write field \"{name}\" as no measurement name written.");
             }
 
             textWriter.Write(EscapeName(name));

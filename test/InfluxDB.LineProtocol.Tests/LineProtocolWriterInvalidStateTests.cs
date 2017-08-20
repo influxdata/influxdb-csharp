@@ -13,7 +13,7 @@ namespace InfluxDB.LineProtocol.Tests
             writer.Measurement("my_measurement");
 
             var ex = Assert.Throws<InvalidOperationException>(() => writer.Measurement("my_measurement"));
-            Assert.Equal("Cannot write new measurement as no field written for current measurement.", ex.Message);
+            Assert.Equal("Cannot write new measurement \"my_measurement\" as no field written for current line.", ex.Message);
             Assert.Equal(LineProtocolWriterPosition.MeasurementWritten, ex.Data["Position"]);
 
             writer.Tag("foo", "bar");
@@ -28,7 +28,7 @@ namespace InfluxDB.LineProtocol.Tests
             var writer = new LineProtocolWriter();
 
             var ex = Assert.Throws<InvalidOperationException>(() => writer.Tag("foo", "bar"));
-            Assert.Equal("Cannot write tag as no measurement name written.", ex.Message);
+            Assert.Equal("Cannot write tag \"foo\" as no measurement name written.", ex.Message);
             Assert.Equal(LineProtocolWriterPosition.NothingWritten, ex.Data["Position"]);
         }
 
@@ -40,7 +40,7 @@ namespace InfluxDB.LineProtocol.Tests
             writer.Measurement("my_measurement").Field("value", 1);
 
             var ex = Assert.Throws<InvalidOperationException>(() => writer.Tag("foo", "bar"));
-            Assert.Equal("Cannot write tag as field(s) already written for current measurement.", ex.Message);
+            Assert.Equal("Cannot write tag \"foo\" as field(s) already written for current line.", ex.Message);
             Assert.Equal(LineProtocolWriterPosition.FieldWritten, ex.Data["Position"]);
 
             writer.Timestamp(123456);
@@ -55,7 +55,7 @@ namespace InfluxDB.LineProtocol.Tests
             var writer = new LineProtocolWriter();
 
             var ex = Assert.Throws<InvalidOperationException>(() => writer.Field("value", 1.2));
-            Assert.Equal("Cannot write field as no measurement name written.", ex.Message);
+            Assert.Equal("Cannot write field \"value\" as no measurement name written.", ex.Message);
             Assert.Equal(LineProtocolWriterPosition.NothingWritten, ex.Data["Position"]);
 
             Assert.Throws<InvalidOperationException>(() => writer.Field("value", 3));
