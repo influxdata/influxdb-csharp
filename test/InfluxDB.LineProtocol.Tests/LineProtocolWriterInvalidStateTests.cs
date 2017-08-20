@@ -6,7 +6,7 @@ namespace InfluxDB.LineProtocol.Tests
     public class LineProtocolWriterInvalidStateTests
     {
         [Fact]
-        public void Can_not_write_new_measurment_when_field_not_written()
+        public void Cannot_write_new_measurment_when_field_not_written()
         {
             var writer = new LineProtocolWriter();
 
@@ -23,7 +23,7 @@ namespace InfluxDB.LineProtocol.Tests
         }
 
         [Fact]
-        public void Can_not_write_tag_when_no_measurement_written()
+        public void Cannot_write_tag_when_no_measurement_written()
         {
             var writer = new LineProtocolWriter();
 
@@ -33,7 +33,7 @@ namespace InfluxDB.LineProtocol.Tests
         }
 
         [Fact]
-        public void Can_not_write_tag_after_field_written()
+        public void Cannot_write_tag_after_field_written()
         {
             var writer = new LineProtocolWriter();
 
@@ -50,7 +50,7 @@ namespace InfluxDB.LineProtocol.Tests
         }
 
         [Fact]
-        public void Can_not_write_field_when_no_measurement_written()
+        public void Cannot_write_field_when_no_measurement_written()
         {
             var writer = new LineProtocolWriter();
 
@@ -66,7 +66,7 @@ namespace InfluxDB.LineProtocol.Tests
         }
 
         [Fact]
-        public void Can_not_write_timestamp_when_no_field_written()
+        public void Cannot_write_timestamp_when_no_field_written()
         {
             var writer = new LineProtocolWriter();
 
