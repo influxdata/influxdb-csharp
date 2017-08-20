@@ -163,8 +163,18 @@ namespace InfluxDB.LineProtocol
             Timestamp(value.Ticks * 100L);
         }
 
+        public void Timestamp(DateTimeOffset value)
+        {
+            Timestamp(value.UtcDateTime);
+        }
+
         public void Timestamp(DateTime value)
         {
+            if (value != null && value.Kind != DateTimeKind.Utc)
+            {
+                throw new ArgumentException("Timestamps must be specified as UTC", nameof(value));
+            }
+
             Timestamp(value - UnixEpoch);
         }
 

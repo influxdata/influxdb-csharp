@@ -87,6 +87,15 @@ namespace InfluxDB.LineProtocol.Tests
             );
         }
 
+        [Fact]
+        public void Timestamps_must_be_UTC()
+        {
+            var writer = new LineProtocolWriter().Measurement("my_measurement").Field("value", 23);
+
+            var ex = Assert.Throws<ArgumentException>(() => writer.Timestamp(DateTime.Now));
+            Assert.Equal("Timestamps must be specified as UTC\r\nParameter name: value", ex.Message);
+        }
+
         private void AssertEqual(string expected, Action<LineProtocolWriter> write)
         {
             var writer = new LineProtocolWriter();

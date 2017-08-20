@@ -87,6 +87,7 @@ namespace InfluxDB.LineProtocol.Tests
 
             Assert.Throws<InvalidOperationException>(() => writer.Timestamp(TimeSpan.FromDays(3045)));
             Assert.Throws<InvalidOperationException>(() => writer.Timestamp(DateTime.UtcNow));
+            Assert.Throws<InvalidOperationException>(() => writer.Timestamp(DateTimeOffset.Now));
         }
     }
 }
