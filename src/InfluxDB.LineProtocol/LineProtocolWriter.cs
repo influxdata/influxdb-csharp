@@ -140,7 +140,7 @@ namespace InfluxDB.LineProtocol
             return this;
         }
 
-        public LineProtocolWriter Timestamp(long value)
+        public void Timestamp(long value)
         {
             switch (Position)
             {
@@ -156,18 +156,16 @@ namespace InfluxDB.LineProtocol
             textWriter.Write(value.ToString(CultureInfo.InvariantCulture));
 
             Position = LineProtocolWriterPosition.TimestampWritten;
-
-            return this;
         }
 
-        public LineProtocolWriter Timestamp(TimeSpan value)
+        public void Timestamp(TimeSpan value)
         {
-            return Timestamp(value.Ticks * 100L);
+            Timestamp(value.Ticks * 100L);
         }
 
-        public LineProtocolWriter Timestamp(DateTime value)
+        public void Timestamp(DateTime value)
         {
-            return Timestamp(value - UnixEpoch);
+            Timestamp(value - UnixEpoch);
         }
 
         public override string ToString()
