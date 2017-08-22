@@ -10,7 +10,7 @@ namespace InfluxDB.LineProtocol
 
         private readonly TextWriter textWriter;
 
-        public LineProtocolWriterPosition Position { get; private set; } = LineProtocolWriterPosition.NothingWritten;
+        private LinePosition position = LinePosition.NothingWritten;
 
         public LineProtocolWriter()
         {
@@ -29,12 +29,12 @@ namespace InfluxDB.LineProtocol
                 throw new ArgumentOutOfRangeException(nameof(name));
             }
 
-            switch (Position)
+            switch (position)
             {
-                case LineProtocolWriterPosition.NothingWritten:
+                case LinePosition.NothingWritten:
                     break;
-                case LineProtocolWriterPosition.FieldWritten:
-                case LineProtocolWriterPosition.TimestampWritten:
+                case LinePosition.FieldWritten:
+                case LinePosition.TimestampWritten:
                     textWriter.Write("\n");
                     break;
                 default:
@@ -43,20 +43,20 @@ namespace InfluxDB.LineProtocol
 
             textWriter.Write(EscapeName(name));
 
-            Position = LineProtocolWriterPosition.MeasurementWritten;
+            position = LinePosition.MeasurementWritten;
 
             return this;
         }
 
         public LineProtocolWriter Tag(string name, string value)
         {
-            switch (Position)
+            switch (position)
             {
-                case LineProtocolWriterPosition.MeasurementWritten:
-                case LineProtocolWriterPosition.TagWritten:
+                case LinePosition.MeasurementWritten:
+                case LinePosition.TagWritten:
                     textWriter.Write(",");
                     break;
-                case LineProtocolWriterPosition.NothingWritten:
+                case LinePosition.NothingWritten:
                     throw InvalidPositionException($"Cannot write tag \"{name}\" as no measurement name written.");
                 default:
                     throw InvalidPositionException($"Cannot write tag \"{name}\" as field(s) already written for current line.");
@@ -66,7 +66,7 @@ namespace InfluxDB.LineProtocol
             textWriter.Write('=');
             textWriter.Write(EscapeName(value));
 
-            Position = LineProtocolWriterPosition.TagWritten;
+            position = LinePosition.TagWritten;
 
             return this;
         }
@@ -77,7 +77,7 @@ namespace InfluxDB.LineProtocol
             textWriter.Write('=');
             textWriter.Write(value.ToString(CultureInfo.InvariantCulture));
 
-            Position = LineProtocolWriterPosition.FieldWritten;
+            position = LinePosition.FieldWritten;
 
             return this;
         }
@@ -88,7 +88,7 @@ namespace InfluxDB.LineProtocol
             textWriter.Write('=');
             textWriter.Write(value.ToString(CultureInfo.InvariantCulture));
 
-            Position = LineProtocolWriterPosition.FieldWritten;
+            position = LinePosition.FieldWritten;
 
             return this;
         }
@@ -99,7 +99,7 @@ namespace InfluxDB.LineProtocol
             textWriter.Write('=');
             textWriter.Write(value.ToString(CultureInfo.InvariantCulture));
 
-            Position = LineProtocolWriterPosition.FieldWritten;
+            position = LinePosition.FieldWritten;
 
             return this;
         }
@@ -111,7 +111,7 @@ namespace InfluxDB.LineProtocol
             textWriter.Write(value.ToString(CultureInfo.InvariantCulture));
             textWriter.Write('i');
 
-            Position = LineProtocolWriterPosition.FieldWritten;
+            position = LinePosition.FieldWritten;
 
             return this;
         }
@@ -124,7 +124,7 @@ namespace InfluxDB.LineProtocol
             textWriter.Write(value.Replace("\"", "\\\""));
             textWriter.Write('"');
 
-            Position = LineProtocolWriterPosition.FieldWritten;
+            position = LinePosition.FieldWritten;
 
             return this;
         }
@@ -135,19 +135,19 @@ namespace InfluxDB.LineProtocol
             textWriter.Write('=');
             textWriter.Write(value ? 't' : 'f');
 
-            Position = LineProtocolWriterPosition.FieldWritten;
+            position = LinePosition.FieldWritten;
 
             return this;
         }
 
         public void Timestamp(long value)
         {
-            switch (Position)
+            switch (position)
             {
-                case LineProtocolWriterPosition.FieldWritten:
+                case LinePosition.FieldWritten:
                     textWriter.Write(" ");
                     break;
-                case LineProtocolWriterPosition.NothingWritten:
+                case LinePosition.NothingWritten:
                     throw InvalidPositionException("Cannot write timestamp as no measurement name written.");
                 default:
                     throw InvalidPositionException("Cannot write timestamp as no field written for current measurement.");
@@ -155,7 +155,7 @@ namespace InfluxDB.LineProtocol
 
             textWriter.Write(value.ToString(CultureInfo.InvariantCulture));
 
-            Position = LineProtocolWriterPosition.TimestampWritten;
+            position = LinePosition.TimestampWritten;
         }
 
         public void Timestamp(TimeSpan value)
@@ -185,13 +185,13 @@ namespace InfluxDB.LineProtocol
 
         private void WriteFieldKey(string name)
         {
-            switch (Position)
+            switch (position)
             {
-                case LineProtocolWriterPosition.MeasurementWritten:
-                case LineProtocolWriterPosition.TagWritten:
+                case LinePosition.MeasurementWritten:
+                case LinePosition.TagWritten:
                     textWriter.Write(" ");
                     break;
-                case LineProtocolWriterPosition.FieldWritten:
+                case LinePosition.FieldWritten:
                     textWriter.Write(",");
                     break;
                 default:
@@ -222,9 +222,18 @@ namespace InfluxDB.LineProtocol
             {
                 Data =
                 {
-                    { "Position", Position }
+                    { "Position", position.ToString() }
                 }
             };
+        }
+
+        enum LinePosition
+        {
+            NothingWritten,
+            MeasurementWritten,
+            TagWritten,
+            FieldWritten,
+            TimestampWritten
         }
     }
 }
