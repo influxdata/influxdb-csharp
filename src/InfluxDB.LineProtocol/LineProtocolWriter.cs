@@ -41,7 +41,21 @@ namespace InfluxDB.LineProtocol
                     throw InvalidPositionException($"Cannot write new measurement \"{name}\" as no field written for current line.");
             }
 
-            textWriter.Write(EscapeName(name));
+            foreach (char c in name)
+            {
+                switch (c)
+                {
+                    case ' ':
+                        textWriter.Write("\\ ");
+                        break;
+                    case ',':
+                        textWriter.Write("\\,");
+                        break;
+                    default:
+                        textWriter.Write(c);
+                        break;
+                }
+            }
 
             position = LinePosition.MeasurementWritten;
 
@@ -50,6 +64,16 @@ namespace InfluxDB.LineProtocol
 
         public LineProtocolWriter Tag(string name, string value)
         {
+            if (name == null)
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
+
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+
             switch (position)
             {
                 case LinePosition.MeasurementWritten:
@@ -62,9 +86,9 @@ namespace InfluxDB.LineProtocol
                     throw InvalidPositionException($"Cannot write tag \"{name}\" as field(s) already written for current line.");
             }
 
-            textWriter.Write(EscapeName(name));
+            WriteEscapedName(name);
             textWriter.Write('=');
-            textWriter.Write(EscapeName(value));
+            WriteEscapedName(value);
 
             position = LinePosition.TagWritten;
 
@@ -185,6 +209,11 @@ namespace InfluxDB.LineProtocol
 
         private void WriteFieldKey(string name)
         {
+            if (name == null)
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
+
             switch (position)
             {
                 case LinePosition.MeasurementWritten:
@@ -198,20 +227,29 @@ namespace InfluxDB.LineProtocol
                     throw InvalidPositionException($"Cannot write field \"{name}\" as no measurement name written.");
             }
 
-            textWriter.Write(EscapeName(name));
+            WriteEscapedName(name);
         }
 
-        public static string EscapeName(string nameOrKey)
+        private void WriteEscapedName(string name)
         {
-            if (nameOrKey == null)
+            foreach (char c in name)
             {
-                throw new ArgumentNullException(nameof(nameOrKey));
+                switch (c)
+                {
+                    case ' ':
+                        textWriter.Write("\\ ");
+                        break;
+                    case ',':
+                        textWriter.Write("\\,");
+                        break;
+                    case '=':
+                        textWriter.Write("\\=");
+                        break;
+                    default:
+                        textWriter.Write(c);
+                        break;
+                }
             }
-
-            return nameOrKey
-                .Replace("=", "\\=")
-                .Replace(" ", "\\ ")
-                .Replace(",", "\\,");
         }
 
         private InvalidOperationException InvalidPositionException(string message)
