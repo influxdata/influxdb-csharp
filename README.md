@@ -89,6 +89,17 @@ if (!influxResult.Success)
     Console.Error.WriteLine(influxResult.ErrorMessage);
 ```
 
+## Diagnostics
+
+The collector will not throw exceptions when communication errors occur. To be notified of metric collection issues, register an error handler:
+
+```csharp
+CollectorLog.RegisterErrorHandler((message, exception) =>
+{
+    Console.WriteLine($"{message}: {exception}");
+});
+```
+
 ## Status
 
 This project is still undergoing some change while in development, but the core functionality is stabilizing. See issues tagged `enhancement` for roadmap items. It's currently targeting .NET 4.5.1 and .NET Core using Visual Studio 2017.

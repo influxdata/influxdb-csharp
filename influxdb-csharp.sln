@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.9
+VisualStudioVersion = 15.0.26730.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{72DC28B9-37B5-425C-8532-5CA91D253A70}"
 EndProject
@@ -29,6 +29,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample", "sample\Sample\Sam
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InfluxDB.Collector", "src\InfluxDB.Collector\InfluxDB.Collector.csproj", "{F690F3E3-D9F0-441A-9E70-4F70998BDD1B}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Benchmark", "sample\Benchmark\Benchmark.csproj", "{2A34EE83-FB59-4A41-8BB5-174BE678533E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{F690F3E3-D9F0-441A-9E70-4F70998BDD1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F690F3E3-D9F0-441A-9E70-4F70998BDD1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F690F3E3-D9F0-441A-9E70-4F70998BDD1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A34EE83-FB59-4A41-8BB5-174BE678533E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A34EE83-FB59-4A41-8BB5-174BE678533E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A34EE83-FB59-4A41-8BB5-174BE678533E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A34EE83-FB59-4A41-8BB5-174BE678533E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,5 +66,9 @@ Global
 		{34173CA2-1551-4E46-B8E7-E4629A48E415} = {75C71D21-E6FD-493F-A355-997EEF4DDF11}
 		{DC6028D6-ED1D-4857-B5EB-28BA05E3F531} = {CD65EE64-FDA8-4ED9-A7F2-81BDD9F64C64}
 		{F690F3E3-D9F0-441A-9E70-4F70998BDD1B} = {72DC28B9-37B5-425C-8532-5CA91D253A70}
+		{2A34EE83-FB59-4A41-8BB5-174BE678533E} = {CD65EE64-FDA8-4ED9-A7F2-81BDD9F64C64}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AB0C6BCE-235A-4018-8644-7652EC826FF5}
 	EndGlobalSection
 EndGlobal
