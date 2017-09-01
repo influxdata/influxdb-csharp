@@ -190,36 +190,43 @@ namespace InfluxDB.LineProtocol
             position = LinePosition.TimestampWritten;
         }
 
-        public void Timestamp(TimeSpan value)
+        public void Timestamp(TimeSpan value, PrecisionResolutionStrategies resolutionStrategy = PrecisionResolutionStrategies.Error)
         {
-            if (value.Ticks * 100 % (long)Precision != 0)
+            var nanoseconds = value.Ticks * 100;
+
+            var nanoSecondsAbovePrecision = value.Ticks * 100 % (long)Precision;
+
+            if (nanoSecondsAbovePrecision != 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(value));
+                switch (resolutionStrategy)
+                {
+                    case PrecisionResolutionStrategies.Error:
+                        throw new ArgumentOutOfRangeException(nameof(value));
+                    case PrecisionResolutionStrategies.Floor:
+                        nanoseconds -= nanoSecondsAbovePrecision;
+                        break;
+                    case PrecisionResolutionStrategies.Ceiling:
+                        nanoseconds += (long)Precision - nanoSecondsAbovePrecision;
+                        break;
+                    case PrecisionResolutionStrategies.Round:
+                        if (nanoSecondsAbovePrecision < (long)Precision / 2)
+                        {
+                            Timestamp(value, PrecisionResolutionStrategies.Floor);
+                        }
+                        else
+                        {
+                            Timestamp(value, PrecisionResolutionStrategies.Ceiling);
+                        }
+                        return;
+                    default:
+                        throw new NotImplementedException();
+                }
             }
 
-            switch (Precision)
-            {
-                case Precision.Nanoseconds:
-                    Timestamp(value.Ticks * 100L);
-                    return;
-                case Precision.Microseconds:
-                    Timestamp(value.Ticks / 10L);
-                    return;
-                case Precision.Milliseconds:
-                    Timestamp(value.Ticks / TimeSpan.TicksPerMillisecond);
-                    return;
-                case Precision.Seconds:
-                    Timestamp(value.Ticks / TimeSpan.TicksPerSecond);
-                    return;
-                case Precision.Hours:
-                    Timestamp(value.Ticks / TimeSpan.TicksPerHour);
-                    return;
-                default:
-                    throw new NotImplementedException();
-            }
+            Timestamp(nanoseconds / (long)Precision);
         }
 
-        public void Timestamp(DateTimeOffset value)
+        public void Timestamp(DateTimeOffset value, PrecisionResolutionStrategies resolutionStrategy = PrecisionResolutionStrategies.Error)
         {
             Timestamp(value.UtcDateTime);
         }

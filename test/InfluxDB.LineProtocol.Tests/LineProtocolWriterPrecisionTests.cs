@@ -39,5 +39,52 @@ namespace InfluxDB.LineProtocol.Tests
 
             Assert.Throws<ArgumentOutOfRangeException>(() => writer.Timestamp(timestamp));
         }
+
+        [Theory]
+        [InlineData(Precision.Microseconds)]
+        [InlineData(Precision.Milliseconds)]
+        [InlineData(Precision.Seconds)]
+        [InlineData(Precision.Hours)]
+        public void Can_floor_if_wrong_precision_used(Precision precision)
+        {
+            var writer = new LineProtocolWriter(precision);
+
+            var timestamp = TimeSpan.FromTicks(1);
+
+            writer.Measurement("foo").Field("bar", 1f).Timestamp(timestamp, PrecisionResolutionStrategies.Floor);
+
+            Assert.Equal("foo bar=1 0", writer.ToString());
+        }
+
+        [Theory]
+        [InlineData(Precision.Microseconds)]
+        [InlineData(Precision.Milliseconds)]
+        [InlineData(Precision.Seconds)]
+        [InlineData(Precision.Hours)]
+        public void Can_ceiling_if_wrong_precision_used(Precision precision)
+        {
+            var writer = new LineProtocolWriter(precision);
+
+            var timestamp = TimeSpan.FromTicks(1);
+
+            writer.Measurement("foo").Field("bar", 1f).Timestamp(timestamp, PrecisionResolutionStrategies.Ceiling);
+
+            Assert.Equal("foo bar=1 1", writer.ToString());
+        }
+
+        [Theory]
+        [InlineData(Precision.Microseconds)]
+        [InlineData(Precision.Milliseconds)]
+        [InlineData(Precision.Seconds)]
+        [InlineData(Precision.Hours)]
+        public void Can_round_if_wrong_precision_used(Precision precision)
+        {
+            var writer = new LineProtocolWriter(precision);
+
+            writer.Measurement("foo").Field("bar", true).Timestamp(TimeSpan.FromTicks(1), PrecisionResolutionStrategies.Round);
+            writer.Measurement("foo").Field("bar", true).Timestamp(TimeSpan.FromTicks(((long)precision / 100) - 1), PrecisionResolutionStrategies.Round);
+
+            Assert.Equal("foo bar=t 0\nfoo bar=t 1", writer.ToString());
+        }
     }
 }
