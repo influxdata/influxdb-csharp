@@ -36,19 +36,38 @@ namespace InfluxDB.LineProtocol.Client
 
             payload.Format(writer);
 
-            return SendAsync(writer.ToString(), cancellationToken);
+            return SendAsync(writer.ToString(), Precision.Nanoseconds, cancellationToken);
         }
 
         public Task<LineProtocolWriteResult> SendAsync(LineProtocolWriter writer, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return SendAsync(writer.ToString(), cancellationToken);
+            return SendAsync(writer.ToString(), writer.Precision, cancellationToken);
         }
 
-        private async Task<LineProtocolWriteResult> SendAsync(string payload, CancellationToken cancellationToken = default(CancellationToken))
+        private async Task<LineProtocolWriteResult> SendAsync(string payload, Precision precision = Precision.Nanoseconds, CancellationToken cancellationToken = default(CancellationToken))
         {
             var endpoint = $"write?db={Uri.EscapeDataString(_database)}";
             if (!string.IsNullOrEmpty(_username))
                 endpoint += $"&u={Uri.EscapeDataString(_username)}&p={Uri.EscapeDataString(_password)}";
+
+            switch (precision)
+            {
+                case Precision.Microseconds:
+                    endpoint += "&precision=u";
+                    break;
+                case Precision.Milliseconds:
+                    endpoint += "&precision=ms";
+                    break;
+                case Precision.Seconds:
+                    endpoint += "&precision=s";
+                    break;
+                case Precision.Minutes:
+                    endpoint += "&precision=m";
+                    break;
+                case Precision.Hours:
+                    endpoint += "&precision=h";
+                    break;
+            }
 
             var content = new StringContent(payload, Encoding.UTF8);
             var response = await _httpClient.PostAsync(endpoint, content, cancellationToken).ConfigureAwait(false);

@@ -12,10 +12,18 @@ namespace InfluxDB.LineProtocol
 
         private LinePosition position = LinePosition.NothingWritten;
 
-        public LineProtocolWriter()
+        public LineProtocolWriter(Precision precision = Precision.Nanoseconds)
         {
+            if (!Enum.IsDefined(typeof(Precision), precision))
+            {
+                throw new ArgumentOutOfRangeException(nameof(precision));
+            }
+
+            this.Precision = precision;
             this.textWriter = new StringWriter();
         }
+
+        public Precision Precision { get; }
 
         public LineProtocolWriter Measurement(string name)
         {
@@ -184,7 +192,31 @@ namespace InfluxDB.LineProtocol
 
         public void Timestamp(TimeSpan value)
         {
-            Timestamp(value.Ticks * 100L);
+            if (value.Ticks * 100 % (long)Precision != 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value));
+            }
+
+            switch (Precision)
+            {
+                case Precision.Nanoseconds:
+                    Timestamp(value.Ticks * 100L);
+                    return;
+                case Precision.Microseconds:
+                    Timestamp(value.Ticks / 10L);
+                    return;
+                case Precision.Milliseconds:
+                    Timestamp(value.Ticks / TimeSpan.TicksPerMillisecond);
+                    return;
+                case Precision.Seconds:
+                    Timestamp(value.Ticks / TimeSpan.TicksPerSecond);
+                    return;
+                case Precision.Hours:
+                    Timestamp(value.Ticks / TimeSpan.TicksPerHour);
+                    return;
+                default:
+                    throw new NotImplementedException();
+            }
         }
 
         public void Timestamp(DateTimeOffset value)
