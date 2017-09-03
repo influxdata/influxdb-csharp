@@ -172,8 +172,37 @@ namespace InfluxDB.LineProtocol
             return this;
         }
 
-        public void Timestamp(long value)
+        public void Timestamp(long nanoseconds, PrecisionResolutionStrategies resolutionStrategy = PrecisionResolutionStrategies.Error)
         {
+            var nanoSecondsAbovePrecision = nanoseconds % (long)Precision;
+
+            if (nanoSecondsAbovePrecision != 0)
+            {
+                switch (resolutionStrategy)
+                {
+                    case PrecisionResolutionStrategies.Error:
+                        throw new ArgumentOutOfRangeException(nameof(nanoseconds));
+                    case PrecisionResolutionStrategies.Floor:
+                        nanoseconds -= nanoSecondsAbovePrecision;
+                        break;
+                    case PrecisionResolutionStrategies.Ceiling:
+                        nanoseconds += (long)Precision - nanoSecondsAbovePrecision;
+                        break;
+                    case PrecisionResolutionStrategies.Round:
+                        if (nanoSecondsAbovePrecision < (long)Precision / 2)
+                        {
+                            Timestamp(nanoseconds, PrecisionResolutionStrategies.Floor);
+                        }
+                        else
+                        {
+                            Timestamp(nanoseconds, PrecisionResolutionStrategies.Ceiling);
+                        }
+                        return;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(resolutionStrategy));
+                }
+            }
+
             switch (position)
             {
                 case LinePosition.FieldWritten:
@@ -185,60 +214,30 @@ namespace InfluxDB.LineProtocol
                     throw InvalidPositionException("Cannot write timestamp as no field written for current measurement.");
             }
 
-            textWriter.Write(value.ToString(CultureInfo.InvariantCulture));
+            var timestamp = nanoseconds / (long)Precision;
+            textWriter.Write(timestamp.ToString(CultureInfo.InvariantCulture));
 
             position = LinePosition.TimestampWritten;
         }
 
         public void Timestamp(TimeSpan value, PrecisionResolutionStrategies resolutionStrategy = PrecisionResolutionStrategies.Error)
         {
-            var nanoseconds = value.Ticks * 100;
-
-            var nanoSecondsAbovePrecision = value.Ticks * 100 % (long)Precision;
-
-            if (nanoSecondsAbovePrecision != 0)
-            {
-                switch (resolutionStrategy)
-                {
-                    case PrecisionResolutionStrategies.Error:
-                        throw new ArgumentOutOfRangeException(nameof(value));
-                    case PrecisionResolutionStrategies.Floor:
-                        nanoseconds -= nanoSecondsAbovePrecision;
-                        break;
-                    case PrecisionResolutionStrategies.Ceiling:
-                        nanoseconds += (long)Precision - nanoSecondsAbovePrecision;
-                        break;
-                    case PrecisionResolutionStrategies.Round:
-                        if (nanoSecondsAbovePrecision < (long)Precision / 2)
-                        {
-                            Timestamp(value, PrecisionResolutionStrategies.Floor);
-                        }
-                        else
-                        {
-                            Timestamp(value, PrecisionResolutionStrategies.Ceiling);
-                        }
-                        return;
-                    default:
-                        throw new NotImplementedException();
-                }
-            }
-
-            Timestamp(nanoseconds / (long)Precision);
+            Timestamp(value.Ticks * 100, resolutionStrategy);
         }
 
         public void Timestamp(DateTimeOffset value, PrecisionResolutionStrategies resolutionStrategy = PrecisionResolutionStrategies.Error)
         {
-            Timestamp(value.UtcDateTime);
+            Timestamp(value.UtcDateTime, resolutionStrategy);
         }
 
-        public void Timestamp(DateTime value)
+        public void Timestamp(DateTime value, PrecisionResolutionStrategies resolutionStrategy = PrecisionResolutionStrategies.Error)
         {
             if (value != null && value.Kind != DateTimeKind.Utc)
             {
                 throw new ArgumentException("Timestamps must be specified as UTC", nameof(value));
             }
 
-            Timestamp(value - UnixEpoch);
+            Timestamp(value - UnixEpoch, resolutionStrategy);
         }
 
         public override string ToString()
