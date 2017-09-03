@@ -190,22 +190,22 @@ namespace InfluxDB.LineProtocol
                 resolutionStrategy = defaultResolutionStrategy;
             }
 
-            var nanoSecondsAbovePrecision = nanoseconds % (long)Precision;
+            var nanosecondsAbovePrecision = nanoseconds % (long)Precision;
 
-            if (nanoSecondsAbovePrecision != 0)
+            if (nanosecondsAbovePrecision != 0)
             {
                 switch (resolutionStrategy.Value)
                 {
                     case PrecisionResolutionStrategy.Error:
                         throw new ArgumentOutOfRangeException(nameof(nanoseconds));
                     case PrecisionResolutionStrategy.Floor:
-                        nanoseconds -= nanoSecondsAbovePrecision;
+                        nanoseconds -= nanosecondsAbovePrecision;
                         break;
                     case PrecisionResolutionStrategy.Ceiling:
-                        nanoseconds += (long)Precision - nanoSecondsAbovePrecision;
+                        nanoseconds += (long)Precision - nanosecondsAbovePrecision;
                         break;
                     case PrecisionResolutionStrategy.Round:
-                        if (nanoSecondsAbovePrecision < (long)Precision / 2)
+                        if (nanosecondsAbovePrecision < (long)Precision / 2)
                         {
                             Timestamp(nanoseconds, PrecisionResolutionStrategy.Floor);
                         }

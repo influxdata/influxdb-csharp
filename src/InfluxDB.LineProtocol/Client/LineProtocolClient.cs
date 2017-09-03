@@ -44,7 +44,7 @@ namespace InfluxDB.LineProtocol.Client
             return SendAsync(writer.ToString(), writer.Precision, cancellationToken);
         }
 
-        private async Task<LineProtocolWriteResult> SendAsync(string payload, Precision precision = Precision.Nanoseconds, CancellationToken cancellationToken = default(CancellationToken))
+        private async Task<LineProtocolWriteResult> SendAsync(string payload, Precision precision, CancellationToken cancellationToken = default(CancellationToken))
         {
             var endpoint = $"write?db={Uri.EscapeDataString(_database)}";
             if (!string.IsNullOrEmpty(_username))
