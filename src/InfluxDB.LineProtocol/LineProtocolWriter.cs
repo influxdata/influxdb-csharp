@@ -11,15 +11,27 @@ namespace InfluxDB.LineProtocol
         private readonly TextWriter textWriter;
 
         private LinePosition position = LinePosition.NothingWritten;
+        private PrecisionResolutionStrategy defaultResolutionStrategy;
 
-        public LineProtocolWriter(Precision precision = Precision.Nanoseconds)
+        public LineProtocolWriter(Precision precision = Precision.Nanoseconds, PrecisionResolutionStrategy defaultResolutionStrategy = PrecisionResolutionStrategy.Error)
         {
             if (!Enum.IsDefined(typeof(Precision), precision))
             {
                 throw new ArgumentOutOfRangeException(nameof(precision));
             }
 
+            if (!Enum.IsDefined(typeof(PrecisionResolutionStrategy), defaultResolutionStrategy))
+            {
+                throw new ArgumentOutOfRangeException(nameof(defaultResolutionStrategy));
+            }
+
+            if (defaultResolutionStrategy == PrecisionResolutionStrategy.Undefined)
+            {
+                throw new ArgumentOutOfRangeException(nameof(defaultResolutionStrategy), "Need to define a precision resolution strategy.");
+            }
+
             this.Precision = precision;
+            this.defaultResolutionStrategy = defaultResolutionStrategy;
             this.textWriter = new StringWriter();
         }
 
@@ -172,30 +184,35 @@ namespace InfluxDB.LineProtocol
             return this;
         }
 
-        public void Timestamp(long nanoseconds, PrecisionResolutionStrategies resolutionStrategy = PrecisionResolutionStrategies.Error)
+        public void Timestamp(long nanoseconds, PrecisionResolutionStrategy resolutionStrategy = PrecisionResolutionStrategy.Undefined)
         {
+            if (resolutionStrategy == PrecisionResolutionStrategy.Undefined)
+            {
+                resolutionStrategy = defaultResolutionStrategy;
+            }
+
             var nanoSecondsAbovePrecision = nanoseconds % (long)Precision;
 
             if (nanoSecondsAbovePrecision != 0)
             {
                 switch (resolutionStrategy)
                 {
-                    case PrecisionResolutionStrategies.Error:
+                    case PrecisionResolutionStrategy.Error:
                         throw new ArgumentOutOfRangeException(nameof(nanoseconds));
-                    case PrecisionResolutionStrategies.Floor:
+                    case PrecisionResolutionStrategy.Floor:
                         nanoseconds -= nanoSecondsAbovePrecision;
                         break;
-                    case PrecisionResolutionStrategies.Ceiling:
+                    case PrecisionResolutionStrategy.Ceiling:
                         nanoseconds += (long)Precision - nanoSecondsAbovePrecision;
                         break;
-                    case PrecisionResolutionStrategies.Round:
+                    case PrecisionResolutionStrategy.Round:
                         if (nanoSecondsAbovePrecision < (long)Precision / 2)
                         {
-                            Timestamp(nanoseconds, PrecisionResolutionStrategies.Floor);
+                            Timestamp(nanoseconds, PrecisionResolutionStrategy.Floor);
                         }
                         else
                         {
-                            Timestamp(nanoseconds, PrecisionResolutionStrategies.Ceiling);
+                            Timestamp(nanoseconds, PrecisionResolutionStrategy.Ceiling);
                         }
                         return;
                     default:
@@ -220,17 +237,17 @@ namespace InfluxDB.LineProtocol
             position = LinePosition.TimestampWritten;
         }
 
-        public void Timestamp(TimeSpan value, PrecisionResolutionStrategies resolutionStrategy = PrecisionResolutionStrategies.Error)
+        public void Timestamp(TimeSpan value, PrecisionResolutionStrategy resolutionStrategy = PrecisionResolutionStrategy.Undefined)
         {
             Timestamp(value.Ticks * 100, resolutionStrategy);
         }
 
-        public void Timestamp(DateTimeOffset value, PrecisionResolutionStrategies resolutionStrategy = PrecisionResolutionStrategies.Error)
+        public void Timestamp(DateTimeOffset value, PrecisionResolutionStrategy resolutionStrategy = PrecisionResolutionStrategy.Undefined)
         {
             Timestamp(value.UtcDateTime, resolutionStrategy);
         }
 
-        public void Timestamp(DateTime value, PrecisionResolutionStrategies resolutionStrategy = PrecisionResolutionStrategies.Error)
+        public void Timestamp(DateTime value, PrecisionResolutionStrategy resolutionStrategy = PrecisionResolutionStrategy.Undefined)
         {
             if (value != null && value.Kind != DateTimeKind.Utc)
             {

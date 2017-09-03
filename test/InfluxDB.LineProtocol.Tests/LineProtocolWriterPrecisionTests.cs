@@ -51,7 +51,7 @@ namespace InfluxDB.LineProtocol.Tests
 
             var timestamp = TimeSpan.FromTicks(1);
 
-            writer.Measurement("foo").Field("bar", 1f).Timestamp(timestamp, PrecisionResolutionStrategies.Floor);
+            writer.Measurement("foo").Field("bar", 1f).Timestamp(timestamp, PrecisionResolutionStrategy.Floor);
 
             Assert.Equal("foo bar=1 0", writer.ToString());
         }
@@ -67,7 +67,7 @@ namespace InfluxDB.LineProtocol.Tests
 
             var timestamp = TimeSpan.FromTicks(1);
 
-            writer.Measurement("foo").Field("bar", 1f).Timestamp(timestamp, PrecisionResolutionStrategies.Ceiling);
+            writer.Measurement("foo").Field("bar", 1f).Timestamp(timestamp, PrecisionResolutionStrategy.Ceiling);
 
             Assert.Equal("foo bar=1 1", writer.ToString());
         }
@@ -81,10 +81,32 @@ namespace InfluxDB.LineProtocol.Tests
         {
             var writer = new LineProtocolWriter(precision);
 
-            writer.Measurement("foo").Field("bar", true).Timestamp(TimeSpan.FromTicks(1), PrecisionResolutionStrategies.Round);
-            writer.Measurement("foo").Field("bar", true).Timestamp(TimeSpan.FromTicks(((long)precision / 100) - 1), PrecisionResolutionStrategies.Round);
+            writer.Measurement("foo").Field("bar", true).Timestamp(TimeSpan.FromTicks(1), PrecisionResolutionStrategy.Round);
+            writer.Measurement("foo").Field("bar", true).Timestamp(TimeSpan.FromTicks(((long)precision / 100) - 1), PrecisionResolutionStrategy.Round);
 
             Assert.Equal("foo bar=t 0\nfoo bar=t 1", writer.ToString());
+        }
+
+        [Fact]
+        public void Can_define_resolution_strategy_when_creating_the_writer()
+        {
+            var writer = new LineProtocolWriter(Precision.Seconds, PrecisionResolutionStrategy.Round);
+
+            writer.Measurement("foo").Field("bar", true).Timestamp(TimeSpan.FromMilliseconds(499));
+            writer.Measurement("foo").Field("bar", true).Timestamp(TimeSpan.FromMilliseconds(500));
+
+            Assert.Equal("foo bar=t 0\nfoo bar=t 1", writer.ToString());
+        }
+
+        [Fact]
+        public void Can_override_resolution_strategy_when_writing_point()
+        {
+            var writer = new LineProtocolWriter(Precision.Seconds, PrecisionResolutionStrategy.Round);
+
+            writer.Measurement("foo").Field("bar", true).Timestamp(TimeSpan.FromMilliseconds(700));
+            writer.Measurement("foo").Field("bar", true).Timestamp(TimeSpan.FromMilliseconds(700), PrecisionResolutionStrategy.Floor);
+
+            Assert.Equal("foo bar=t 1\nfoo bar=t 0", writer.ToString());
         }
     }
 }
