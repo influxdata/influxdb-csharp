@@ -183,18 +183,18 @@ namespace InfluxDB.LineProtocol
             return this;
         }
 
-        public void Timestamp(long nanoseconds, PrecisionResolutionStrategy? resolutionStrategy = null)
+        public void Timestamp(long nanoseconds)
         {
-            if (!resolutionStrategy.HasValue)
-            {
-                resolutionStrategy = defaultResolutionStrategy;
-            }
+            this.Timestamp(nanoseconds, defaultResolutionStrategy);
+        }
 
+        public void Timestamp(long nanoseconds, PrecisionResolutionStrategy resolutionStrategy)
+        {
             var nanosecondsAbovePrecision = nanoseconds % (long)Precision;
 
             if (nanosecondsAbovePrecision != 0)
             {
-                switch (resolutionStrategy.Value)
+                switch (resolutionStrategy)
                 {
                     case PrecisionResolutionStrategy.Error:
                         throw new ArgumentOutOfRangeException(nameof(nanoseconds));
@@ -236,17 +236,32 @@ namespace InfluxDB.LineProtocol
             position = LinePosition.TimestampWritten;
         }
 
-        public void Timestamp(TimeSpan value, PrecisionResolutionStrategy? resolutionStrategy = null)
+        public void Timestamp(TimeSpan value)
+        {
+            Timestamp(value, defaultResolutionStrategy);
+        }
+
+        public void Timestamp(TimeSpan value, PrecisionResolutionStrategy resolutionStrategy)
         {
             Timestamp(value.Ticks * 100, resolutionStrategy);
         }
 
-        public void Timestamp(DateTimeOffset value, PrecisionResolutionStrategy? resolutionStrategy = null)
+        public void Timestamp(DateTimeOffset value)
+        {
+            Timestamp(value, defaultResolutionStrategy);
+        }
+
+        public void Timestamp(DateTimeOffset value, PrecisionResolutionStrategy resolutionStrategy)
         {
             Timestamp(value.UtcDateTime, resolutionStrategy);
         }
 
-        public void Timestamp(DateTime value, PrecisionResolutionStrategy? resolutionStrategy = null)
+        public void Timestamp(DateTime value)
+        {
+            Timestamp(value, defaultResolutionStrategy);
+        }
+
+        public void Timestamp(DateTime value, PrecisionResolutionStrategy resolutionStrategy)
         {
             if (value != null && value.Kind != DateTimeKind.Utc)
             {
