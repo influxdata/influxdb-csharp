@@ -32,16 +32,16 @@ namespace InfluxDB.LineProtocol.Client
 
         public Task<LineProtocolWriteResult> WriteAsync(LineProtocolPayload payload, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var writer = new StringWriter();
+            var stringWriter = new StringWriter();
 
-            payload.Format(writer);
+            payload.Format(stringWriter);
 
-            return SendAsync(writer.ToString(), Precision.Nanoseconds, cancellationToken);
+            return SendAsync(stringWriter.ToString(), Precision.Nanoseconds, cancellationToken);
         }
 
-        public Task<LineProtocolWriteResult> SendAsync(LineProtocolWriter writer, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<LineProtocolWriteResult> SendAsync(LineProtocolWriter lineProtocolWriter, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return SendAsync(writer.ToString(), writer.Precision, cancellationToken);
+            return SendAsync(lineProtocolWriter.ToString(), lineProtocolWriter.Precision, cancellationToken);
         }
 
         private async Task<LineProtocolWriteResult> SendAsync(string payload, Precision precision, CancellationToken cancellationToken = default(CancellationToken))
