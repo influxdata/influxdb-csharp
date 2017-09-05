@@ -32,23 +32,42 @@ namespace InfluxDB.LineProtocol.Client
 
         public Task<LineProtocolWriteResult> WriteAsync(LineProtocolPayload payload, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var writer = new StringWriter();
+            var stringWriter = new StringWriter();
 
-            payload.Format(writer);
+            payload.Format(stringWriter);
 
-            return SendAsync(writer.ToString(), cancellationToken);
+            return SendAsync(stringWriter.ToString(), Precision.Nanoseconds, cancellationToken);
         }
 
-        public Task<LineProtocolWriteResult> SendAsync(LineProtocolWriter writer, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<LineProtocolWriteResult> SendAsync(LineProtocolWriter lineProtocolWriter, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return SendAsync(writer.ToString(), cancellationToken);
+            return SendAsync(lineProtocolWriter.ToString(), lineProtocolWriter.Precision, cancellationToken);
         }
 
-        private async Task<LineProtocolWriteResult> SendAsync(string payload, CancellationToken cancellationToken = default(CancellationToken))
+        private async Task<LineProtocolWriteResult> SendAsync(string payload, Precision precision, CancellationToken cancellationToken = default(CancellationToken))
         {
             var endpoint = $"write?db={Uri.EscapeDataString(_database)}";
             if (!string.IsNullOrEmpty(_username))
                 endpoint += $"&u={Uri.EscapeDataString(_username)}&p={Uri.EscapeDataString(_password)}";
+
+            switch (precision)
+            {
+                case Precision.Microseconds:
+                    endpoint += "&precision=u";
+                    break;
+                case Precision.Milliseconds:
+                    endpoint += "&precision=ms";
+                    break;
+                case Precision.Seconds:
+                    endpoint += "&precision=s";
+                    break;
+                case Precision.Minutes:
+                    endpoint += "&precision=m";
+                    break;
+                case Precision.Hours:
+                    endpoint += "&precision=h";
+                    break;
+            }
 
             var content = new StringContent(payload, Encoding.UTF8);
             var response = await _httpClient.PostAsync(endpoint, content, cancellationToken).ConfigureAwait(false);
