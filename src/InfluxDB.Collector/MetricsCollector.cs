@@ -7,6 +7,9 @@ namespace InfluxDB.Collector
 {
     public abstract class MetricsCollector : IPointEmitter, IDisposable
     {
+        private readonly Util.ITimestampSource _timestampSource = new Util.PseudoHighResTimestampSource();
+
+
         public void Increment(string measurement, long count = 1, IReadOnlyDictionary<string, string> tags = null)
         {
             Write(measurement, new Dictionary<string, object> { { "count", count } }, tags);
@@ -38,7 +41,7 @@ namespace InfluxDB.Collector
         {
             try
             {
-                var point = new PointData(measurement, fields, tags, timestamp ?? DateTime.UtcNow);
+                var point = new PointData(measurement, fields, tags, timestamp ?? _timestampSource.GetUtcNow());
                 Emit(new[] { point });
             }
             catch (Exception ex)
