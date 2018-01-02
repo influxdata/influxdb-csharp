@@ -17,7 +17,7 @@ namespace InfluxDB.Collector.Util
     /// 
     /// As a remediation for this, we infuse DateTime.UtcNow with a sequence number until it ticks over.
     /// </remarks>
-    internal class PseudoHighResTimestampSource : ITimestampSource
+    class PseudoHighResTimestampSource : ITimestampSource
     {
         private long _lastUtcNowTicks = 0;
         private long _sequence = 0;
