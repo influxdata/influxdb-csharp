@@ -45,11 +45,6 @@ namespace InfluxDB.Collector.Util
                     return utcNow;
                 }
             }
-
         }
-
-
     }
-
-
 }
