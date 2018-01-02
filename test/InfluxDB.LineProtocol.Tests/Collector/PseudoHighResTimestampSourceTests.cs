@@ -61,7 +61,6 @@ namespace InfluxDB.LineProtocol.Tests.Collector.Util
 
             Assert.Equal(0, highResTotalCollisions);
             output.WriteLine($"No collisions detected with high resolution source, compared to {dateTimeCollisions} for DateTime.UtcNow.");
-
         }
 
         [Fact]
@@ -109,7 +108,6 @@ namespace InfluxDB.LineProtocol.Tests.Collector.Util
 
             Assert.Equal(0, highResTotalCollisions);
             output.WriteLine($"No collisions detected with high resolution source, compared to {dateTimeCollisions} for DateTime.UtcNow.");
-
         }
 
         [Fact]
@@ -119,7 +117,6 @@ namespace InfluxDB.LineProtocol.Tests.Collector.Util
 
             DateTime result = target.GetUtcNow();
             Assert.Equal(DateTimeKind.Utc, result.Kind);
-
         }
 
         [Fact]
