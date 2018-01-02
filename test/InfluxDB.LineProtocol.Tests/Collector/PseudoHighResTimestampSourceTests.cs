@@ -6,7 +6,6 @@ using InfluxDB.Collector.Util;
 
 namespace InfluxDB.LineProtocol.Tests.Collector.Util
 {
-
     public class PseudoHighResTimeStampSourceTests
     {
         private readonly ITestOutputHelper output;
@@ -16,18 +15,16 @@ namespace InfluxDB.LineProtocol.Tests.Collector.Util
             this.output = output;
         }
 
-
         [Fact]
         public void CanSupplyHighResTimestamps()
         {
-            const int ITERATIONS = 100000;
-
+            const int iterations = 100000;
 
             // Even if we call inside a very tight loop, 
             // we should get better (pseudo) resolution than just DateTime.UtcNow
             long dateTimeCollisions = 0;
             DateTime previousDateTime = DateTime.UtcNow;
-            for (int i = 0; i < ITERATIONS; i++)
+            for (int i = 0; i < iterations; i++)
             {
                 // Attempt with date time directly
                 var current = DateTime.UtcNow;
@@ -38,8 +35,7 @@ namespace InfluxDB.LineProtocol.Tests.Collector.Util
                 }
                 previousDateTime = current;
             }
-
-
+            
             if (0 == dateTimeCollisions)
             {
                 // Warn because we do expect that datetime.now has collisions in such a tight loop
@@ -51,7 +47,7 @@ namespace InfluxDB.LineProtocol.Tests.Collector.Util
             var target = new PseudoHighResTimestampSource();
             long highResTotalCollisions = 0;
             previousDateTime = target.GetUtcNow();
-            for (int i = 0; i < ITERATIONS; i++)
+            for (int i = 0; i < iterations; i++)
             {
                 // Attempt with date time directly
                 var current = target.GetUtcNow();
@@ -71,12 +67,12 @@ namespace InfluxDB.LineProtocol.Tests.Collector.Util
         [Fact]
         public void CanSupplyHighResTimestampsInParallel()
         {
-            const int ITERATIONS = 100000;
+            const int iterations = 100000;
 
             // Even if we call inside a very tight loop, we should get better (pseudo) resolution than just DateTime.UtcNow
             int dateTimeCollisions = 0;
             DateTime previousDateTime = DateTime.UtcNow;
-            Parallel.For(0, ITERATIONS, (i) => // (int i = 0; i < 100000; i++)
+            Parallel.For(0, iterations, (i) => // (int i = 0; i < 100000; i++)
             {
                 // Attempt with date time directly
                 var current = DateTime.UtcNow;
@@ -99,7 +95,7 @@ namespace InfluxDB.LineProtocol.Tests.Collector.Util
             var target = new PseudoHighResTimestampSource();
             int highResTotalCollisions = 0;
             previousDateTime = target.GetUtcNow();
-            Parallel.For(0, ITERATIONS, (i) => // (int i = 0; i < 100000; i++)
+            Parallel.For(0, iterations, (i) => // (int i = 0; i < 100000; i++)
             {
                 // Attempt with date time directly
                 var current = target.GetUtcNow();
@@ -115,7 +111,6 @@ namespace InfluxDB.LineProtocol.Tests.Collector.Util
             output.WriteLine($"No collisions detected with high resolution source, compared to {dateTimeCollisions} for DateTime.UtcNow.");
 
         }
-
 
         [Fact]
         public void WillGiveUtcDateTimeKind()
@@ -135,15 +130,15 @@ namespace InfluxDB.LineProtocol.Tests.Collector.Util
 
             // Average over 10000 iterations and get the average drift
             decimal totalDrift = 0;
-            const int ITERATIONS = 10000;
-            for (int i = 0; i < ITERATIONS; i++)
+            const int iterations = 10000;
+            for (int i = 0; i < iterations; i++)
             {
                 DateTime current = DateTime.UtcNow;
                 DateTime result = target.GetUtcNow();
 
                 totalDrift += Convert.ToDecimal((result - current).TotalMilliseconds);
             }
-            var averageDrift = totalDrift / ITERATIONS;
+            var averageDrift = totalDrift / iterations;
 
             if (averageDrift > MAX_DRIFT_MS)
             {
@@ -152,11 +147,9 @@ namespace InfluxDB.LineProtocol.Tests.Collector.Util
             }
             else
             {
-                output.WriteLine ($"Total Drift over {ITERATIONS} iterations: {totalDrift}ms. Average {averageDrift}ms");
+                output.WriteLine ($"Total Drift over {iterations} iterations: {totalDrift}ms. Average {averageDrift}ms");
             }
-
         }
-
     }
 }
 

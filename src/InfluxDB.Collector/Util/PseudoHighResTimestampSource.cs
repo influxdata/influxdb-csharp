@@ -2,9 +2,6 @@
 
 namespace InfluxDB.Collector.Util
 {
-
-
-
     /// <summary>
     /// Implements <see cref="ITimestampSource"/>
     /// in a way that combines the low-ish resolution DateTime.UtcNow
@@ -19,16 +16,13 @@ namespace InfluxDB.Collector.Util
     /// c) In a web server, it's entirely possible for more than one thread to get the same UtcNow value
     /// 
     /// As a remediation for this, we infuse DateTime.UtcNow with a sequence number until it ticks over.
-    /// 
     /// </remarks>
-    public class PseudoHighResTimestampSource : ITimestampSource
+    internal class PseudoHighResTimestampSource : ITimestampSource
     {
-
         private long _lastUtcNowTicks = 0;
         private long _sequence = 0;
         private readonly object lockObj = new object();
-
-       
+  
         public DateTime GetUtcNow()
         {
             DateTime utcNow = DateTime.UtcNow;

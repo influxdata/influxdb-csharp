@@ -5,7 +5,7 @@ namespace InfluxDB.Collector.Util
     /// <summary>
     /// Supplier of timestamps for metrics 
     /// </summary>
-    internal interface ITimestampSource
+    interface ITimestampSource
     {
         DateTime GetUtcNow();
     }

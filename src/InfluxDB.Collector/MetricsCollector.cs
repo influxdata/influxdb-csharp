@@ -7,8 +7,7 @@ namespace InfluxDB.Collector
 {
     public abstract class MetricsCollector : IPointEmitter, IDisposable
     {
-        private readonly Util.ITimestampSource _timestampSource = new Util.PseudoHighResTimestampSource();
-
+        readonly Util.ITimestampSource _timestampSource = new Util.PseudoHighResTimestampSource();
 
         public void Increment(string measurement, long count = 1, IReadOnlyDictionary<string, string> tags = null)
         {
