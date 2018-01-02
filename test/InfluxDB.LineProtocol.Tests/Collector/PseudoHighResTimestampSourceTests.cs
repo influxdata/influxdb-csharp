@@ -27,7 +27,7 @@ namespace InfluxDB.LineProtocol.Tests.Collector.Util
             for (int i = 0; i < iterations; i++)
             {
                 // Attempt with date time directly
-                var current = DateTime.UtcNow;
+                DateTime current = DateTime.UtcNow;
 
                 if (previousDateTime == current)
                 {
@@ -44,13 +44,13 @@ namespace InfluxDB.LineProtocol.Tests.Collector.Util
 
             // Now attempt to use our pseudo high precision provider that includes a sequence number to ensure that it 
             // never collides
-            var target = new PseudoHighResTimestampSource();
+            ITimestampSource target = new PseudoHighResTimestampSource();
             long highResTotalCollisions = 0;
             previousDateTime = target.GetUtcNow();
             for (int i = 0; i < iterations; i++)
             {
                 // Attempt with date time directly
-                var current = target.GetUtcNow();
+                DateTime current = target.GetUtcNow();
 
                 if (previousDateTime == current)
                 {
@@ -75,7 +75,7 @@ namespace InfluxDB.LineProtocol.Tests.Collector.Util
             Parallel.For(0, iterations, (i) => // (int i = 0; i < 100000; i++)
             {
                 // Attempt with date time directly
-                var current = DateTime.UtcNow;
+                DateTime current = DateTime.UtcNow;
 
                 if (previousDateTime == current)
                 {
@@ -92,13 +92,13 @@ namespace InfluxDB.LineProtocol.Tests.Collector.Util
 
             // Now attempt to use our pseudo high precision provider that includes a sequence number to ensure that it 
             // never collides
-            var target = new PseudoHighResTimestampSource();
+            ITimestampSource target = new PseudoHighResTimestampSource();
             int highResTotalCollisions = 0;
             previousDateTime = target.GetUtcNow();
             Parallel.For(0, iterations, (i) => // (int i = 0; i < 100000; i++)
             {
                 // Attempt with date time directly
-                var current = target.GetUtcNow();
+                DateTime current = target.GetUtcNow();
 
                 if (previousDateTime == current)
                 {
@@ -115,7 +115,7 @@ namespace InfluxDB.LineProtocol.Tests.Collector.Util
         [Fact]
         public void WillGiveUtcDateTimeKind()
         {
-            var target = new PseudoHighResTimestampSource();
+            ITimestampSource target = new PseudoHighResTimestampSource();
 
             DateTime result = target.GetUtcNow();
             Assert.Equal(DateTimeKind.Utc, result.Kind);
@@ -125,7 +125,7 @@ namespace InfluxDB.LineProtocol.Tests.Collector.Util
         [Fact]
         public void WillNotDriftTooFarFromUtcNow()
         {
-            var target = new PseudoHighResTimestampSource();
+            ITimestampSource target = new PseudoHighResTimestampSource();
             const int MAX_DRIFT_MS = 10;
 
             // Average over 10000 iterations and get the average drift
@@ -138,7 +138,7 @@ namespace InfluxDB.LineProtocol.Tests.Collector.Util
 
                 totalDrift += Convert.ToDecimal((result - current).TotalMilliseconds);
             }
-            var averageDrift = totalDrift / iterations;
+            Decimal averageDrift = totalDrift / iterations;
 
             if (averageDrift > MAX_DRIFT_MS)
             {
