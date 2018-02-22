@@ -31,13 +31,13 @@ namespace InfluxDB.LineProtocol.Client
             _password = password;
         }
 
-        public Task<LineProtocolWriteResult> WriteAsync(LineProtocolPayload payload, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<LineProtocolWriteResult> WriteAsync(LineProtocolPayload payload, Precision precision = Precision.Nanoseconds, CancellationToken cancellationToken = default(CancellationToken))
         {
             var stringWriter = new StringWriter();
 
             payload.Format(stringWriter);
 
-            return SendAsync(stringWriter.ToString(), Precision.Nanoseconds, cancellationToken);
+            return SendAsync(stringWriter.ToString(), precision, cancellationToken);
         }
 
         public Task<LineProtocolWriteResult> SendAsync(LineProtocolWriter lineProtocolWriter, CancellationToken cancellationToken = default(CancellationToken))
