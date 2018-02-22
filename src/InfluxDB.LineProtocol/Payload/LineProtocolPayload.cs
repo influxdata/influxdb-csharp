@@ -14,13 +14,13 @@ namespace InfluxDB.LineProtocol.Payload
             _points.Add(point);
         }
 
-        public void Format(TextWriter textWriter)
+        public void Format(TextWriter textWriter, Precision precision)
         {
             if (textWriter == null) throw new ArgumentNullException(nameof(textWriter));
 
             foreach (var point in _points)
             {
-                point.Format(textWriter);
+                point.Format(textWriter, precision);
                 textWriter.Write('\n');
             }
         }

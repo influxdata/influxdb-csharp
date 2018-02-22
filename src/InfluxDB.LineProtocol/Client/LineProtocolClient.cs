@@ -35,7 +35,7 @@ namespace InfluxDB.LineProtocol.Client
         {
             var stringWriter = new StringWriter();
 
-            payload.Format(stringWriter);
+            payload.Format(stringWriter, precision);
 
             return SendAsync(stringWriter.ToString(), precision, cancellationToken);
         }
