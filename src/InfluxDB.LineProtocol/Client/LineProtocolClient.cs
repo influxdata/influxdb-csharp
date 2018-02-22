@@ -11,14 +11,14 @@ namespace InfluxDB.LineProtocol.Client
     public class LineProtocolClient
     {
         readonly HttpClient _httpClient;
-        readonly string _database, _username, _password;
+        readonly string _database, _retentionPolicy, _username, _password;
 
-        public LineProtocolClient(Uri serverBaseAddress, string database, string username = null, string password = null)
-            : this(new HttpClientHandler(), serverBaseAddress, database, username, password)
+        public LineProtocolClient(Uri serverBaseAddress, string database, string retentionPolicy = null, string username = null, string password = null)
+            : this(new HttpClientHandler(), serverBaseAddress, database, retentionPolicy, username, password)
         {
         }
 
-        protected LineProtocolClient(HttpMessageHandler handler, Uri serverBaseAddress, string database, string username, string password)
+        protected LineProtocolClient(HttpMessageHandler handler, Uri serverBaseAddress, string database, string retentionPolicy, string username, string password)
         {
             if (serverBaseAddress == null) throw new ArgumentNullException(nameof(serverBaseAddress));
             if (string.IsNullOrEmpty(database)) throw new ArgumentException("A database must be specified");
@@ -26,6 +26,7 @@ namespace InfluxDB.LineProtocol.Client
             // Overload that allows injecting handler is protected to avoid HttpMessageHandler being part of our public api which would force clients to reference System.Net.Http when using the lib.
             _httpClient = new HttpClient(handler) { BaseAddress = serverBaseAddress };
             _database = database;
+            _retentionPolicy = retentionPolicy;
             _username = username;
             _password = password;
         }
@@ -47,6 +48,8 @@ namespace InfluxDB.LineProtocol.Client
         private async Task<LineProtocolWriteResult> SendAsync(string payload, Precision precision, CancellationToken cancellationToken = default(CancellationToken))
         {
             var endpoint = $"write?db={Uri.EscapeDataString(_database)}";
+            if (!string.IsNullOrWhiteSpace(_retentionPolicy))
+                endpoint += $"&rp={Uri.EscapeDataString(_retentionPolicy)}";
             if (!string.IsNullOrEmpty(_username))
                 endpoint += $"&u={Uri.EscapeDataString(_username)}&p={Uri.EscapeDataString(_password)}";
 
