@@ -14,7 +14,7 @@ Supporting the full/read API of InfluxDB is an explicit _non-goal_: this package
 Install the _InfluxDB.Collector_ NuGet package:
 
 ```powershell
-Install-Package InfluxDB.Collector -Pre
+Install-Package InfluxDB.Collector
 ```
 
 Add `using` statements where needed:
@@ -55,7 +55,7 @@ View aggregated metrics in a dashboarding interface such as [Grafana](http://gra
 The raw API is a very thin wrapper on InfluxDB's HTTP API, in the _InfluxDB.LineProtocol_ package.
 
 ```powershell
-Install-Package InfluxDB.LineProtocol -Pre
+Install-Package InfluxDB.LineProtocol
 ```
 
 To send points, create a `LineProtocolPayload` containing a batch of `LineProtocolPoint`s. Each point carries the measurement name, at least one value, an optional set of tags and an optional timestamp:
