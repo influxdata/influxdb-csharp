@@ -4,7 +4,7 @@
     <Description>A .NET library for efficiently sending time series to InfluxDB</Description>
     <Authors>influxdb-csharp Contributors</Authors>
     <TargetFrameworks>net45;netstandard1.3</TargetFrameworks>
-    <VersionPrefix>1.1.0</VersionPrefix>
+    <VersionPrefix>1.1.1</VersionPrefix>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AssemblyName>InfluxDB.LineProtocol</AssemblyName>
     <PackageId>InfluxDB.LineProtocol</PackageId>
