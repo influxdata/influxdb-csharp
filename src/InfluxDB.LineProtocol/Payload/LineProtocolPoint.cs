@@ -37,7 +37,7 @@ namespace InfluxDB.LineProtocol.Payload
             UtcTimestamp = utcTimestamp;
         }
 
-        public void Format(TextWriter textWriter)
+        public void Format(TextWriter textWriter, Precision precision)
         {
             if (textWriter == null) throw new ArgumentNullException(nameof(textWriter));
 
@@ -47,7 +47,7 @@ namespace InfluxDB.LineProtocol.Payload
             {
                 foreach (var t in Tags.OrderBy(t => t.Key))
                 {
-                    if (t.Value == null || t.Value == "")
+                    if (string.IsNullOrEmpty(t.Value))
                         continue;
 
                     textWriter.Write(',');
@@ -70,9 +70,8 @@ namespace InfluxDB.LineProtocol.Payload
             if (UtcTimestamp != null)
             {
                 textWriter.Write(' ');
-                textWriter.Write(LineProtocolSyntax.FormatTimestamp(UtcTimestamp.Value));
+                textWriter.Write(LineProtocolSyntax.FormatTimestamp(UtcTimestamp.Value, precision));
             }
         }
     }
 }
-

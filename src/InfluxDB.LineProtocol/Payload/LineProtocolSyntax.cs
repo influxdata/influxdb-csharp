@@ -60,7 +60,7 @@ namespace InfluxDB.LineProtocol.Payload
 
         static string FormatBoolean(object b)
         {
-            return ((bool)b) ? "t" : "f";
+            return (bool)b ? "t" : "f";
         }
 
         static string FormatString(string s)
@@ -68,10 +68,26 @@ namespace InfluxDB.LineProtocol.Payload
             return "\"" + s.Replace("\"", "\\\"") + "\"";
         }
 
-        public static string FormatTimestamp(DateTime utcTimestamp)
+        public static string FormatTimestamp(DateTime utcTimestamp, Precision precision)
         {
-            var t = utcTimestamp - Origin;
-            return (t.Ticks * 100L).ToString(CultureInfo.InvariantCulture);
+            TimeSpan ts = utcTimestamp - Origin;
+            switch (precision)
+            {
+                case Precision.Nanoseconds:
+                    return (ts.Ticks * 100).ToString(CultureInfo.InvariantCulture);
+                case Precision.Microseconds:
+                    return (ts.Ticks / 10).ToString(CultureInfo.InvariantCulture);
+                case Precision.Milliseconds:
+                    return ((long)ts.TotalMilliseconds).ToString(CultureInfo.InvariantCulture);
+                case Precision.Seconds:
+                    return ((long)ts.TotalSeconds).ToString(CultureInfo.InvariantCulture);
+                case Precision.Minutes:
+                    return ((long)ts.TotalMinutes).ToString(CultureInfo.InvariantCulture);
+                case Precision.Hours:
+                    return ((long)ts.TotalHours).ToString(CultureInfo.InvariantCulture);
+                default:
+                    throw new NotSupportedException("Precision is unknown to the formatter.");
+            }
         }
     }
 }
