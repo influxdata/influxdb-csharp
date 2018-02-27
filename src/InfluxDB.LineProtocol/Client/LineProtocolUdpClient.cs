@@ -10,25 +10,27 @@ using System.Threading.Tasks;
 
 namespace InfluxDB.LineProtocol.Client
 {
-    public class LineProtocolClient : ILineProtocolClient
+    public class LineProtocolUdpClient : ILineProtocolClient
     {
-        private readonly HttpClient _httpClient;
+        private readonly UdpClient _udpClient;
+        private readonly string _udpHostName;
+        private readonly int _udpPort;
         private readonly string _database, _username, _password;
 
-        public LineProtocolClient(Uri serverBaseAddress, string database, string username = null, string password = null)
-            : this(new HttpClientHandler(), serverBaseAddress, database, username, password)
-        {
-        }
-
-        protected LineProtocolClient(HttpMessageHandler handler, Uri serverBaseAddress, string database, string username, string password)
+        public LineProtocolUdpClient(
+            Uri serverBaseAddress,
+            string database,
+            string username = null,
+            string password = null)
         {
             if (serverBaseAddress == null)
                 throw new ArgumentNullException(nameof(serverBaseAddress));
             if (string.IsNullOrEmpty(database))
                 throw new ArgumentException("A database must be specified");
 
-            // Overload that allows injecting handler is protected to avoid HttpMessageHandler being part of our public api which would force clients to reference System.Net.Http when using the lib.
-            _httpClient = new HttpClient(handler) { BaseAddress = serverBaseAddress };
+            _udpHostName = serverBaseAddress.Host;
+            _udpPort = serverBaseAddress.Port;
+            _udpClient = new UdpClient();
             _database = database;
             _username = username;
             _password = password;
@@ -74,20 +76,10 @@ namespace InfluxDB.LineProtocol.Client
             }
 
             var content = new StringContent(payload, Encoding.UTF8);
-            var response = await _httpClient.PostAsync(endpoint, content, cancellationToken).ConfigureAwait(false);
-            if (response.IsSuccessStatusCode)
-            {
-                return new LineProtocolWriteResult(true, null);
-            }
 
-            var body = string.Empty;
-
-            if (response.Content != null)
-            {
-                body = await response.Content.ReadAsStringAsync();
-            }
-
-            return new LineProtocolWriteResult(false, $"{response.StatusCode} {response.ReasonPhrase} {body}");
+            var buffer = Encoding.UTF8.GetBytes(payload);
+            int len = await _udpClient.SendAsync(buffer, buffer.Length, _udpHostName, _udpPort);
+            return new LineProtocolWriteResult(len == buffer.Length, null);
         }
     }
 }
