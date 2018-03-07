@@ -4,7 +4,7 @@
     <TargetFrameworks>netcoreapp2.0</TargetFrameworks>
     <AssemblyName>InfluxDB.LineProtocol.Tests</AssemblyName>
     <PackageId>InfluxDB.LineProtocol.Tests</PackageId>
-    <RuntimeFrameworkVersion Condition=" '$(TargetFramework)' == 'netcoreapp2.0' ">2.0.0</RuntimeFrameworkVersion>
+    <RuntimeFrameworkVersion>2.0.0</RuntimeFrameworkVersion>
   </PropertyGroup>
 
   <ItemGroup>
