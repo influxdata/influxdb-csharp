@@ -11,9 +11,10 @@ namespace InfluxDB.Collector.Configuration
     {
         readonly CollectorConfiguration _configuration;
         readonly List<Action<PointData[]>> _emitters = new List<Action<PointData[]>>();
-        LineProtocolClient _client;
+        private ILineProtocolClient _client;
 
-        public PipelinedCollectorEmitConfiguration(CollectorConfiguration configuration)
+        public PipelinedCollectorEmitConfiguration(
+            CollectorConfiguration configuration)
         {
             if (configuration == null) throw new ArgumentNullException(nameof(configuration));
             _configuration = configuration;
@@ -21,7 +22,10 @@ namespace InfluxDB.Collector.Configuration
 
         public override CollectorConfiguration InfluxDB(Uri serverBaseAddress, string database, string username = null, string password = null)
         {
-            _client = new LineProtocolClient(serverBaseAddress, database, username, password);
+            if (string.Compare(serverBaseAddress.Scheme, "udp", ignoreCase: true) == 0)
+                _client = new LineProtocolUdpClient(serverBaseAddress, database, username, password);
+            else
+                _client = new LineProtocolClient(serverBaseAddress, database, username, password);
             return _configuration;
         }
 

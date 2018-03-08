@@ -7,9 +7,9 @@ namespace InfluxDB.Collector.Pipeline.Emit
 {
     class HttpLineProtocolEmitter : IDisposable, IPointEmitter
     {
-        readonly LineProtocolClient _client;
+        readonly ILineProtocolClient _client;
 
-        public HttpLineProtocolEmitter(LineProtocolClient client)
+        public HttpLineProtocolEmitter(ILineProtocolClient client)
         {
             if (client == null) throw new ArgumentNullException(nameof(client));
             _client = client;
