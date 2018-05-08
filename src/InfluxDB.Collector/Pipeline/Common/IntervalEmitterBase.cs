@@ -6,7 +6,7 @@ using InfluxDB.Collector.Platform;
 
 namespace InfluxDB.Collector.Pipeline.Common
 {
-    internal abstract class IntervalEmitterBase : IPointEmitter, IDisposable
+    internal abstract class IntervalEmitterBase : IPointEmitter, ISinglePointEmitter, IDisposable
     {
         readonly object _queueLock = new object();
         Queue<PointData> _queue = new Queue<PointData>();
@@ -78,14 +78,9 @@ namespace InfluxDB.Collector.Pipeline.Common
 
         public void Emit(PointData[] points)
         {
-            lock (_stateLock)
+            if (!CheckState())
             {
-                if (_unloading) return;
-                if (!_started)
-                {
-                    _started = true;
-                    _timer.Start(TimeSpan.Zero);
-                }
+                return;
             }
 
             lock (_queueLock)
@@ -93,6 +88,34 @@ namespace InfluxDB.Collector.Pipeline.Common
                 foreach (var point in points)
                     _queue.Enqueue(point);
             }
+        }
+
+        public void Emit(PointData point)
+        {
+            if (!CheckState())
+            {
+                return;
+            }
+
+            lock (_queueLock)
+            {
+                _queue.Enqueue(point);
+            }
+        }
+
+        private bool CheckState()
+        {
+            lock (_stateLock)
+            {
+                if (_unloading) return false;
+                if (!_started)
+                {
+                    _started = true;
+                    _timer.Start(TimeSpan.Zero);
+                }
+            }
+
+            return true;
         }
 
         protected abstract void HandleBatch(IReadOnlyCollection<PointData> batch);
