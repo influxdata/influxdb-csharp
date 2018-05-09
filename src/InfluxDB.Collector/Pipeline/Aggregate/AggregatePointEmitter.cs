@@ -21,8 +21,11 @@ namespace InfluxDB.Collector.Pipeline.Aggregate
 
         protected override void HandleBatch(IReadOnlyCollection<PointData> batch)
         {
+            DateTime now = DateTime.UtcNow;
+            DateTime bucketThreshold = now - _interval;
+
             var grouped = batch.GroupBy(x => new GroupingKey(
-                x.UtcTimestamp.HasValue ? x.UtcTimestamp.Value.Ticks / _interval.Ticks : 0,
+                DetermineBucket(x.UtcTimestamp, bucketThreshold, now),
                 DetermineKind(x),
                 x.Measurement,
                 x.Tags
@@ -31,6 +34,45 @@ namespace InfluxDB.Collector.Pipeline.Aggregate
             var aggregated = grouped.SelectMany(Aggregate).ToArray();
 
             _parent.Emit(aggregated);
+        }
+
+        private long DetermineBucket(DateTime? timestamp, DateTime bucketThreshold, DateTime now)
+        {
+            if (!timestamp.HasValue)
+            {
+                return 0;
+            }
+
+            DateTime value = timestamp.Value;
+
+            if (value >= bucketThreshold && value <= now)
+            {
+                // point was in timer interval
+                return bucketThreshold.Ticks;
+            }
+            else
+            {
+                // point was before or after timer interval, round it to multiple of interval
+                return (value.Ticks / _interval.Ticks) * _interval.Ticks;
+            }
+        }
+
+        static MeasurementKind DetermineKind(PointData x)
+        {
+            if (x.Fields.Count != 1) return MeasurementKind.Other;
+
+            if (x.Fields.TryGetValue("count", out var count) && count is long)
+            {
+                return MeasurementKind.Increment;
+            }
+            else if (x.Fields.TryGetValue("value", out var value) && value is TimeSpan)
+            {
+                return MeasurementKind.Time;
+            }
+            else
+            {
+                return MeasurementKind.Other;
+            }
         }
 
         IEnumerable<PointData> Aggregate(IGrouping<GroupingKey, PointData> group)
@@ -69,25 +111,7 @@ namespace InfluxDB.Collector.Pipeline.Aggregate
 
         private DateTime AverageTime(GroupingKey key)
         {
-            return new DateTime(key.Bucket * _interval.Ticks + _interval.Ticks / 2, DateTimeKind.Utc);
-        }
-
-        static MeasurementKind DetermineKind(PointData x)
-        {
-            if (x.Fields.Count != 1) return MeasurementKind.Other;
-
-            if (x.Fields.TryGetValue("count", out var count) && count is long)
-            {
-                return MeasurementKind.Increment;
-            }
-            else if (x.Fields.TryGetValue("value", out var value) && value is TimeSpan)
-            {
-                return MeasurementKind.Time;
-            }
-            else
-            {
-                return MeasurementKind.Other;
-            }
+            return new DateTime(key.Bucket + _interval.Ticks / 2, DateTimeKind.Utc);
         }
     }
 }
