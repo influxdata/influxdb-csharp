@@ -19,7 +19,7 @@ namespace InfluxDB.LineProtocol.Client
         {
         }
 
-        protected LineProtocolClient(
+        public LineProtocolClient(
                 HttpMessageHandler handler,
                 Uri serverBaseAddress,
                 string database,
