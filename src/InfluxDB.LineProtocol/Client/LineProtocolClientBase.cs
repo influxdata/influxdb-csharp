@@ -13,6 +13,7 @@ namespace InfluxDB.LineProtocol.Client
     public abstract class LineProtocolClientBase : ILineProtocolClient
     {
         protected readonly string _database, _username, _password;
+        private volatile int _isDisposed;
 
         protected LineProtocolClientBase(Uri serverBaseAddress, string database, string username, string password)
         {
@@ -41,9 +42,28 @@ namespace InfluxDB.LineProtocol.Client
             return OnSendAsync(lineProtocolWriter.ToString(), lineProtocolWriter.Precision, cancellationToken);
         }
 
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
         protected abstract Task<LineProtocolWriteResult> OnSendAsync(
             string payload,
             Precision precision,
             CancellationToken cancellationToken = default(CancellationToken));
+
+        protected void Dispose(bool disposing)
+        {
+            if (Interlocked.CompareExchange(ref _isDisposed, 1, 0) == 0)
+            {
+                if (disposing)
+                {
+                    DisposeOfManagedResources();
+                }
+            }
+        }
+
+        protected abstract void DisposeOfManagedResources();
     }
 }

@@ -80,5 +80,10 @@ namespace InfluxDB.LineProtocol.Client
 
             return new LineProtocolWriteResult(false, $"{response.StatusCode} {response.ReasonPhrase} {body}");
         }
+
+        protected override void DisposeOfManagedResources()
+        {
+            _httpClient.Dispose();
+        }
     }
 }

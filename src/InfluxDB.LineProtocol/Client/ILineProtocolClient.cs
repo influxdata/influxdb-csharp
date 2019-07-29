@@ -1,10 +1,11 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using InfluxDB.LineProtocol.Payload;
 
 namespace InfluxDB.LineProtocol.Client
 {
-    public interface ILineProtocolClient
+    public interface ILineProtocolClient : IDisposable
     {
         Task<LineProtocolWriteResult> SendAsync(
             LineProtocolWriter lineProtocolWriter,
