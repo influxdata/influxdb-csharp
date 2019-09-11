@@ -1,10 +1,8 @@
-﻿using InfluxDB.LineProtocol.Payload;
-using System;
+﻿using System;
 using System.IO;
 using System.IO.Compression;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,8 +14,8 @@ namespace InfluxDB.LineProtocol.Client
         private readonly HttpClient _httpClient;
         private readonly bool _enableCompression;
 
-        public LineProtocolClient(Uri serverBaseAddress, string database, string username = null, string password = null, bool enableCompression = false)
-            : this(new HttpClientHandler(), serverBaseAddress, database, username, password, enableCompression)
+        public LineProtocolClient(Uri serverBaseAddress, string database, string username = null, string password = null, bool enableCompression = false, string retentionPolicy = null)
+            : this(new HttpClientHandler(), serverBaseAddress, database, username, password, enableCompression, retentionPolicy)
         {
         }
 
@@ -27,8 +25,9 @@ namespace InfluxDB.LineProtocol.Client
                 string database,
                 string username,
                 string password,
-                bool enableCompression)
-            :base(serverBaseAddress, database, username, password)
+                bool enableCompression,
+                string retentionPolicy)
+            :base(serverBaseAddress, database, username, password, retentionPolicy)
         {
             if (serverBaseAddress == null)
                 throw new ArgumentNullException(nameof(serverBaseAddress));
@@ -46,6 +45,8 @@ namespace InfluxDB.LineProtocol.Client
             CancellationToken cancellationToken = default(CancellationToken))
         {
             var endpoint = $"write?db={Uri.EscapeDataString(_database)}";
+            if (!string.IsNullOrWhiteSpace(_retentionPolicy))
+                endpoint += $"&rp={Uri.EscapeDataString(_retentionPolicy)}";
             if (!string.IsNullOrEmpty(_username))
                 endpoint += $"&u={Uri.EscapeDataString(_username)}&p={Uri.EscapeDataString(_password)}";
 

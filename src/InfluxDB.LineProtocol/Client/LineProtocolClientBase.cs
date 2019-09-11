@@ -1,10 +1,6 @@
 ﻿using InfluxDB.LineProtocol.Payload;
 using System;
 using System.IO;
-using System.Net;
-using System.Net.Http;
-using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,9 +8,9 @@ namespace InfluxDB.LineProtocol.Client
 {
     public abstract class LineProtocolClientBase : ILineProtocolClient
     {
-        protected readonly string _database, _username, _password;
+        protected readonly string _database, _username, _password, _retentionPolicy;
 
-        protected LineProtocolClientBase(Uri serverBaseAddress, string database, string username, string password)
+        protected LineProtocolClientBase(Uri serverBaseAddress, string database, string username, string password, string retentionPolicy)
         {
             if (serverBaseAddress == null)
                 throw new ArgumentNullException(nameof(serverBaseAddress));
@@ -25,6 +21,7 @@ namespace InfluxDB.LineProtocol.Client
             _database = database;
             _username = username;
             _password = password;
+            _retentionPolicy = retentionPolicy;
         }
 
         public Task<LineProtocolWriteResult> WriteAsync(LineProtocolPayload payload, CancellationToken cancellationToken = default(CancellationToken))
