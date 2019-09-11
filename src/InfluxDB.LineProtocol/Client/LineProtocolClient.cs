@@ -14,8 +14,8 @@ namespace InfluxDB.LineProtocol.Client
     {
         private readonly HttpClient _httpClient;
 
-        public LineProtocolClient(Uri serverBaseAddress, string database, string username = null, string password = null)
-            : this(new HttpClientHandler(), serverBaseAddress, database, username, password)
+        public LineProtocolClient(Uri serverBaseAddress, string database, string username = null, string password = null, string retentionPolicy = null)
+            : this(new HttpClientHandler(), serverBaseAddress, database, username, password, retentionPolicy)
         {
         }
 
@@ -24,8 +24,9 @@ namespace InfluxDB.LineProtocol.Client
                 Uri serverBaseAddress,
                 string database,
                 string username,
-                string password)
-            :base(serverBaseAddress, database, username, password)
+                string password,
+                string retentionPolicy)
+            :base(serverBaseAddress, database, username, password, retentionPolicy)
         {
             if (serverBaseAddress == null)
                 throw new ArgumentNullException(nameof(serverBaseAddress));
@@ -42,6 +43,8 @@ namespace InfluxDB.LineProtocol.Client
             CancellationToken cancellationToken = default(CancellationToken))
         {
             var endpoint = $"write?db={Uri.EscapeDataString(_database)}";
+            if (!string.IsNullOrWhiteSpace(_retentionPolicy))
+                endpoint += $"&rp={Uri.EscapeDataString(_retentionPolicy)}";
             if (!string.IsNullOrEmpty(_username))
                 endpoint += $"&u={Uri.EscapeDataString(_username)}&p={Uri.EscapeDataString(_password)}";
 
