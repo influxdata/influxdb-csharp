@@ -1,6 +1,8 @@
 # InfluxDB .NET Collector [![Build status](https://ci.appveyor.com/api/projects/status/0tqovixkf1e1pqu3/branch/master?svg=true)](https://ci.appveyor.com/project/NicholasBlumhardt/influxdb-lineprotocol/branch/master) [![NuGet Version](http://img.shields.io/nuget/v/InfluxDB.LineProtocol.svg?style=flat)](https://www.nuget.org/packages/InfluxDB.LineProtocol/)
 
-This is a C# implementation of the [InfluxDB](http://influxdb.org) ingestion ['Line Protocol'](https://influxdb.com/docs/v0.9/write_protocols/line.html).
+### Note: This library is for use with InfluxDB 1.x. For connecting to InfluxDB 2.x instances, please use the [influxdb-client-csharp](https://github.com/influxdata/influxdb-client-csharp) client.
+
+This is a C# implementation of the [InfluxDB](http://influxdb.org) ingestion ['Line Protocol'](https://docs.influxdata.com/influxdb/latest/write_protocols/line_protocol_tutorial/).
 
 You can use it to write time series data to InfluxDB version 0.9.3+ over HTTP or HTTPS. Two packages are provided:
 
@@ -48,7 +50,7 @@ Metrics.Write("cpu_time",
 Metrics.Measure("working_set", process.WorkingSet64);
 ```
 
-View aggregated metrics in a dashboarding interface such as [Grafana](http://grafana.org).
+View aggregated metrics in a dashboarding interface such as [Chronograf](https://www.influxdata.com/time-series-platform/chronograf/) or [Grafana](http://grafana.org).
 
 ## Raw Client API
 
