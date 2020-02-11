@@ -1,5 +1,4 @@
-﻿using ICSharpCode.SharpZipLib.GZip;
-using InfluxDB.LineProtocol.Payload;
+﻿using InfluxDB.LineProtocol.Payload;
 using System;
 using System.IO;
 using System.IO.Compression;
