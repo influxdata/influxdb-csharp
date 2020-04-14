@@ -10,6 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "global", "global", "{35451F
 		appveyor.yml = appveyor.yml
 		Build.ps1 = Build.ps1
 		README.md = README.md
+		CHANGELOG.md = CHANGELOG.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{75C71D21-E6FD-493F-A355-997EEF4DDF11}"
