@@ -3,10 +3,10 @@
   <PropertyGroup>
     <Description>A minimal metrics collection API for InfluxDB</Description>
     <Authors>influxdb-csharp Contributors</Authors>
-    <TargetFrameworks>net45;netstandard1.3</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AssemblyName>InfluxDB.Collector</AssemblyName>
-    <VersionPrefix>1.1.0</VersionPrefix>
+    <VersionPrefix>1.1.1</VersionPrefix>
     <PackageId>InfluxDB.Collector</PackageId>
     <PackageTags>influxdb</PackageTags>
     <PackageIconUrl>https://raw.githubusercontent.com/influxdata/influxdb-csharp/master/asset/influxdata.jpg</PackageIconUrl>
@@ -17,22 +17,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Net.Sockets" Version="4.3.0" />
     <ProjectReference Include="..\InfluxDB.LineProtocol\InfluxDB.LineProtocol.csproj" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">
-    <PackageReference Include="System.Collections" Version="4.0.11" />
-    <PackageReference Include="System.Linq" Version="4.1.0" />
-    <PackageReference Include="System.Threading" Version="4.0.11" />
-    <PackageReference Include="System.Runtime" Version="4.1.0" />
-    <PackageReference Include="System.Net.Http" Version="4.1.1" />
-    <PackageReference Include="System.Console" Version="4.0.0" />
-    <PackageReference Include="System.Runtime.Extensions" Version="4.1.0" />
+    <PackageReference Include="System.Collections" Version="4.3.0" />
+    <PackageReference Include="System.Linq" Version="4.3.0" />
+    <PackageReference Include="System.Threading" Version="4.3.0" />
+    <PackageReference Include="System.Runtime" Version="4.3.0" />
+    <PackageReference Include="System.Net.Http" Version="4.3.3" />
+    <PackageReference Include="System.Console" Version="4.3.0" />
+    <PackageReference Include="System.Runtime.Extensions" Version="4.3.0" />
   </ItemGroup>
 
 </Project>

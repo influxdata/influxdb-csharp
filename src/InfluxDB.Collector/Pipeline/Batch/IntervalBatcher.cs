@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using InfluxDB.Collector.Diagnostics;
 using InfluxDB.Collector.Platform;
+using InfluxDB.Collector.Util;
 
 namespace InfluxDB.Collector.Pipeline.Batch
 {
@@ -12,6 +14,7 @@ namespace InfluxDB.Collector.Pipeline.Batch
         Queue<PointData> _queue = new Queue<PointData>();
 
         readonly TimeSpan _interval;
+        readonly int? _maxBatchSize;
         readonly IPointEmitter _parent;
 
         readonly object _stateLock = new object();
@@ -19,10 +22,11 @@ namespace InfluxDB.Collector.Pipeline.Batch
         bool _unloading;
         bool _started;
 
-        public IntervalBatcher(TimeSpan interval, IPointEmitter parent)
+        public IntervalBatcher(TimeSpan interval, int? maxBatchSize, IPointEmitter parent)
         {
             _parent = parent;
             _interval = interval;
+            _maxBatchSize = maxBatchSize;
             _timer = new PortableTimer(cancel => OnTick());
         }
 
@@ -60,7 +64,17 @@ namespace InfluxDB.Collector.Pipeline.Batch
                     _queue = new Queue<PointData>();
                 }
 
-                _parent.Emit(batch.ToArray());
+                if (_maxBatchSize == null || batch.Count <= _maxBatchSize.Value)
+                {
+                    _parent.Emit(batch.ToArray());
+                }
+                else
+                {
+                    foreach (var chunk in batch.Batch(_maxBatchSize.Value))
+                    {
+                        _parent.Emit(chunk.ToArray());
+                    }
+                }
             }
             catch (Exception ex)
             {

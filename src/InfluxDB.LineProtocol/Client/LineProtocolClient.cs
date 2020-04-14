@@ -1,50 +1,45 @@
 ﻿using InfluxDB.LineProtocol.Payload;
 using System;
 using System.IO;
+using System.Net;
 using System.Net.Http;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace InfluxDB.LineProtocol.Client
 {
-    public class LineProtocolClient
+    public class LineProtocolClient : LineProtocolClientBase
     {
-        readonly HttpClient _httpClient;
-        readonly string _database, _username, _password;
+        private readonly HttpClient _httpClient;
 
         public LineProtocolClient(Uri serverBaseAddress, string database, string username = null, string password = null)
             : this(new HttpClientHandler(), serverBaseAddress, database, username, password)
         {
         }
 
-        protected LineProtocolClient(HttpMessageHandler handler, Uri serverBaseAddress, string database, string username, string password)
+        protected LineProtocolClient(
+                HttpMessageHandler handler,
+                Uri serverBaseAddress,
+                string database,
+                string username,
+                string password)
+            :base(serverBaseAddress, database, username, password)
         {
-            if (serverBaseAddress == null) throw new ArgumentNullException(nameof(serverBaseAddress));
-            if (string.IsNullOrEmpty(database)) throw new ArgumentException("A database must be specified");
+            if (serverBaseAddress == null)
+                throw new ArgumentNullException(nameof(serverBaseAddress));
+            if (string.IsNullOrEmpty(database))
+                throw new ArgumentException("A database must be specified");
 
             // Overload that allows injecting handler is protected to avoid HttpMessageHandler being part of our public api which would force clients to reference System.Net.Http when using the lib.
             _httpClient = new HttpClient(handler) { BaseAddress = serverBaseAddress };
-            _database = database;
-            _username = username;
-            _password = password;
         }
 
-        public Task<LineProtocolWriteResult> WriteAsync(LineProtocolPayload payload, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            var stringWriter = new StringWriter();
-
-            payload.Format(stringWriter);
-
-            return SendAsync(stringWriter.ToString(), Precision.Nanoseconds, cancellationToken);
-        }
-
-        public Task<LineProtocolWriteResult> SendAsync(LineProtocolWriter lineProtocolWriter, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            return SendAsync(lineProtocolWriter.ToString(), lineProtocolWriter.Precision, cancellationToken);
-        }
-
-        private async Task<LineProtocolWriteResult> SendAsync(string payload, Precision precision, CancellationToken cancellationToken = default(CancellationToken))
+        protected override async Task<LineProtocolWriteResult> OnSendAsync(
+            string payload,
+            Precision precision,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
             var endpoint = $"write?db={Uri.EscapeDataString(_database)}";
             if (!string.IsNullOrEmpty(_username))
