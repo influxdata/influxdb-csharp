@@ -1,4 +1,11 @@
-# InfluxDB .NET Collector [![Build status](https://ci.appveyor.com/api/projects/status/0tqovixkf1e1pqu3/branch/master?svg=true)](https://ci.appveyor.com/project/NicholasBlumhardt/influxdb-lineprotocol/branch/master) [![NuGet Version](http://img.shields.io/nuget/v/InfluxDB.LineProtocol.svg?style=flat)](https://www.nuget.org/packages/InfluxDB.LineProtocol/)
+# InfluxDB .NET Collector
+
+[![Build status](https://img.shields.io/appveyor/build/influxdata/influxdb-csharp)](https://ci.appveyor.com/project/influxdata/influxdb-csharp/) 
+[![NuGet Version](http://img.shields.io/nuget/v/InfluxDB.LineProtocol.svg?style=flat)](https://www.nuget.org/packages/InfluxDB.LineProtocol/)
+[![License](https://img.shields.io/github/license/influxdata/influxdb-csharp.svg)](https://github.com/influxdata/influxdb-csharp/blob/master/LICENSE)
+[![GitHub issues](https://img.shields.io/github/issues-raw/influxdata/influxdb-csharp.svg)](https://github.com/influxdata/influxdb-csharp/issues)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr-raw/influxdata/influxdb-csharp.svg)](https://github.com/influxdata/influxdb-csharp/pulls)
+[![Slack Status](https://img.shields.io/badge/slack-join_chat-white.svg?logo=slack&style=social)](https://www.influxdata.com/slack)
 
 ### Note: This library is for use with InfluxDB 1.x. For connecting to InfluxDB 2.x instances, please use the [influxdb-client-csharp](https://github.com/influxdata/influxdb-client-csharp) client.
 
