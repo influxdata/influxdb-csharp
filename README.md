@@ -1,6 +1,6 @@
 # InfluxDB .NET Collector
 
-[![Build status](https://img.shields.io/appveyor/build/influxdata/influxdb-csharp)](https://ci.appveyor.com/project/influxdata/influxdb-csharp/) 
+[![Build status](https://img.shields.io/appveyor/build/influx/influxdb-csharp)](https://ci.appveyor.com/project/influx/influxdb-csharp/) 
 [![NuGet Version](http://img.shields.io/nuget/v/InfluxDB.LineProtocol.svg?style=flat)](https://www.nuget.org/packages/InfluxDB.LineProtocol/)
 [![License](https://img.shields.io/github/license/influxdata/influxdb-csharp.svg)](https://github.com/influxdata/influxdb-csharp/blob/master/LICENSE)
 [![GitHub issues](https://img.shields.io/github/issues-raw/influxdata/influxdb-csharp.svg)](https://github.com/influxdata/influxdb-csharp/issues)
