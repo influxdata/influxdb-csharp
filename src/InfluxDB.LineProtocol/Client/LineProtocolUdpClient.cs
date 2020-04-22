@@ -42,5 +42,10 @@ namespace InfluxDB.LineProtocol.Client
             int len = await _udpClient.SendAsync(buffer, buffer.Length, _udpHostName, _udpPort);
             return new LineProtocolWriteResult(len == buffer.Length, null);
         }
+
+        protected override void DisposeOfManagedResources()
+        {
+            _udpClient.Dispose();
+        }
     }
 }
