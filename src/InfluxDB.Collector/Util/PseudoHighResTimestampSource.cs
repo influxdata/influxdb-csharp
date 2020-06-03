@@ -25,17 +25,17 @@ namespace InfluxDB.Collector.Util
   
         public DateTime GetUtcNow()
         {
-            DateTime utcNow = DateTime.UtcNow;
-
             lock (lockObj)
             {
-                if (utcNow.Ticks == _lastUtcNowTicks)
+                DateTime utcNow = DateTime.UtcNow;
+                
+                if (utcNow.Ticks <= _lastUtcNowTicks)
                 {
                     // UtcNow hasn't rolled over yet, so 
                     // add a sequence number to it
                     _sequence++;
-                    long pseudoTicks = utcNow.Ticks + _sequence;
-                    return new DateTime(pseudoTicks, DateTimeKind.Utc);
+                    _lastUtcNowTicks = utcNow.Ticks + _sequence;
+                    return new DateTime(_lastUtcNowTicks, DateTimeKind.Utc);
                 }
                 else
                 {

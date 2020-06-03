@@ -1,3 +1,8 @@
+## 1.2.0 [unreleased]
+
+### CI
+1. [#86](https://github.com/influxdata/influxdb-csharp/pull/86): AppVeyor deploy preview releases
+
 ## 1.1.1 [2020-04-14]
 
 ### Features
