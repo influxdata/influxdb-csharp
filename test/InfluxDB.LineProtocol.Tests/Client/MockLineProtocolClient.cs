@@ -7,11 +7,11 @@ namespace InfluxDB.LineProtocol.Tests.Client
 {
     public class MockLineProtocolClient : LineProtocolClient
     {
-        public MockLineProtocolClient(string database) : this(new MockHttpMessageHandler(), new Uri("http://localhost:8086"), database)
+        public MockLineProtocolClient(string database, bool enableCompression = false) : this(new MockHttpMessageHandler(), new Uri("http://localhost:8086"), database, enableCompression)
         {
         }
 
-        private MockLineProtocolClient(MockHttpMessageHandler handler, Uri serverBaseAddress, string database) : base(handler, serverBaseAddress, database, null, null, false)
+        private MockLineProtocolClient(MockHttpMessageHandler handler, Uri serverBaseAddress, string database, bool enableCompression) : base(handler, serverBaseAddress, database, null, null, enableCompression)
         {
             Handler = handler;
             BaseAddress = serverBaseAddress;
