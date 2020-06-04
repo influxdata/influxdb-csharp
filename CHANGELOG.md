@@ -1,7 +1,9 @@
 ## 1.2.0 [unreleased]
 
-### CI
+### Features
 1. [#81](https://github.com/influxdata/influxdb-csharp/pull/81): Add compression to LineProtocolClient
+
+### CI
 1. [#86](https://github.com/influxdata/influxdb-csharp/pull/86): AppVeyor deploy preview releases
 
 ## 1.1.1 [2020-04-14]
