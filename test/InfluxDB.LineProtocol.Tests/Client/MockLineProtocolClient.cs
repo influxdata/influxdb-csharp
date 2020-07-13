@@ -10,7 +10,7 @@ namespace InfluxDB.LineProtocol.Tests.Client
         {
         }
 
-        private MockLineProtocolClient(MockHttpMessageHandler handler, Uri serverBaseAddress, string database, bool enableCompression) : base(handler, serverBaseAddress, database, null, enableCompression, null)
+        private MockLineProtocolClient(MockHttpMessageHandler handler, Uri serverBaseAddress, string database, bool enableCompression) : base(handler, serverBaseAddress, database, null, null, enableCompression, null)
         {
             Handler = handler;
             BaseAddress = serverBaseAddress;

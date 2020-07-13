@@ -25,7 +25,7 @@ namespace InfluxDB.Collector.Configuration
             if (string.Compare(serverBaseAddress.Scheme, "udp", ignoreCase: true) == 0)
                 _client = new LineProtocolUdpClient(serverBaseAddress, database, username, password, retentionPolicy);
             else
-                _client = new LineProtocolClient(serverBaseAddress, database, username, password, retentionPolicy);
+                _client = new LineProtocolClient(serverBaseAddress, database, username, password, false, retentionPolicy);
             return _configuration;
         }
 
