@@ -6,6 +6,10 @@
 ### CI
 1. [#86](https://github.com/influxdata/influxdb-csharp/pull/86): AppVeyor deploy preview releases
 
+### Dependencies
+1. [#98](https://github.com/influxdata/influxdb-csharp/pull/98): Update dependencies:
+    - System.Net.Http to 4.3.4
+    
 ## 1.1.1 [2020-04-14]
 
 ### Features
