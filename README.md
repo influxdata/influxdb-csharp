@@ -1,3 +1,13 @@
+The v1 client libraries for InfluxDB were typically developed and maintained by
+community members. They have all now been succeeded by v2 client libraries.
+They are being archived it in favor of the v2 client library. See
+https://github.com/influxdata/influxdb-csharp/issues/100.
+
+If there are still users of this v1 client library, and they or somebody else
+are willing to keep them updated with security fixes at a minimum please reach
+out on the [Community Forums](https://community.influxdata.com/) or
+[InfluxData Slack](https://influxdata.com/slack).
+
 # InfluxDB .NET Collector
 
 [![Build status](https://img.shields.io/appveyor/build/influx/influxdb-csharp/dev)](https://ci.appveyor.com/project/influx/influxdb-csharp/) 
