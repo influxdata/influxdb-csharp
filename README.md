@@ -1,7 +1,6 @@
 The v1 client libraries for InfluxDB were typically developed and maintained by
-community members. They have all now been succeeded by v2 client libraries.
-They are being archived it in favor of the v2 client library. See
-https://github.com/influxdata/influxdb-csharp/issues/100.
+community members. For InfluxDB 3.0 users, this library is succeeded by the
+lightweight [v3 client library](https://github.com/InfluxCommunity/influxdb3-csharp).
 
 If there are still users of this v1 client library, and they or somebody else
 are willing to keep them updated with security fixes at a minimum please reach
